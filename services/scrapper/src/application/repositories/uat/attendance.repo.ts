@@ -1,7 +1,7 @@
-import { ClassData, ProfessorClass, UATCredentials } from '@/domain/entities/uat/classData';
+import { ClassData, UATCredentials } from '@campus/types';
 
 export interface AttendanceRepo {
-    getProfessorClasses(credentials: UATCredentials): Promise<ProfessorClass[]>;
+    getProfessorClasses(credentials: UATCredentials): Promise<ClassData[]>;
 }
 
 export const ATTENDANCE_REPO_TOKEN = Symbol('attendance.repo');

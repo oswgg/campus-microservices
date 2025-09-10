@@ -1,13 +1,12 @@
 import { Inject } from '@nestjs/common';
-import {
-    PROFESSOR_REPO_TOKEN,
-    ProfessorRepository,
-} from '../repositories/professor.repo';
 import { ClientProxy } from '@nestjs/microservices';
 import { RegisterProfessorEvent } from '@/domain/events/register.event';
 import { Professor } from '@/domain/entities/professor.entity';
 import { SERVICE_NAMES } from '@campus/types';
-import { firstValueFrom } from 'rxjs';
+import {
+    PROFESSOR_REPO_TOKEN,
+    ProfessorRepository,
+} from '@/application/repositories/professor.repo';
 
 export class CreateProfessor {
     constructor(

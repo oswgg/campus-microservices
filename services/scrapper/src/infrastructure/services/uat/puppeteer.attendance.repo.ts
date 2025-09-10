@@ -1,13 +1,12 @@
 import { AttendanceRepo } from '@/application/repositories/uat/attendance.repo';
 import { UATAttendanceConfig } from '@/config/uat/attendance.config';
 import {
-    UATCredentials,
-    ClassData,
     ClassWeek,
     StudentInAttendanceTable,
-    ProfessorClass,
-} from '@/domain/entities/uat/classData';
+    ClassDataWithSelector,
+} from '@/domain/entities/uat';
 import { sleep } from '@/domain/utils/sleep';
+import { ClassData, UATCredentials } from '@campus/types';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import puppeteer, { Browser, Page } from 'puppeteer';
 
@@ -17,32 +16,22 @@ export class PuppeteerAttendanceRepo implements AttendanceRepo, OnModuleInit {
     private page: Page;
 
     async onModuleInit() {
-        try {
-            console.log(
-                'Launching Puppeteer with config:',
-                UATAttendanceConfig.browser,
-            );
-            this.browser = await puppeteer.launch(UATAttendanceConfig.browser);
-            this.page = await this.browser.newPage();
-            await this.page.setRequestInterception(true);
-            this.page.on('request', (req) => {
-                const resourceType = req.resourceType();
-                if (['image', 'font', 'media'].includes(resourceType)) {
-                    req.abort();
-                } else {
-                    req.continue();
-                }
-            });
-            console.log('Puppeteer launched successfully');
-        } catch (error) {
-            console.error('Failed to launch Puppeteer:', error);
-            throw error;
-        }
+        this.browser = await puppeteer.launch(UATAttendanceConfig.browser);
+        this.page = await this.browser.newPage();
+        await this.page.setRequestInterception(true);
+        this.page.on('request', (req) => {
+            const resourceType = req.resourceType();
+            if (['image', 'font', 'media'].includes(resourceType)) {
+                req.abort();
+            } else {
+                req.continue();
+            }
+        });
     }
 
     async getProfessorClasses(
         credentials: UATCredentials,
-    ): Promise<ProfessorClass[]> {
+    ): Promise<ClassData[]> {
         await this.loginToUAT(credentials);
         await this.navigateToControlAsistencia();
         const materias = await this.readTablaMaterias();
@@ -133,7 +122,7 @@ export class PuppeteerAttendanceRepo implements AttendanceRepo, OnModuleInit {
 
     private async readTablaMaterias() {
         const datos = await this.page.evaluate((selector) => {
-            const resultado: ClassData[] = [];
+            const resultado: ClassDataWithSelector[] = [];
 
             const tabla = document.querySelector(selector);
             if (!tabla) return resultado;
@@ -173,8 +162,8 @@ export class PuppeteerAttendanceRepo implements AttendanceRepo, OnModuleInit {
     }
 
     private async fillStudentsForClasses(
-        materias: ClassData[],
-    ): Promise<ClassData[]> {
+        materias: ClassDataWithSelector[],
+    ): Promise<ClassDataWithSelector[]> {
         for (const materia of materias) {
             await this.page.locator(materia.selector).click();
             await sleep(600);

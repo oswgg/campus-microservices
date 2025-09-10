@@ -16,3 +16,5 @@ export const SERVICE_PORTS = {
     SCRAPER: 4353,
     API_GATEWAY: 3000,
 };
+
+export * from './uat';

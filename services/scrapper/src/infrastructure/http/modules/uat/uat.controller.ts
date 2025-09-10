@@ -8,19 +8,10 @@ export class UatController {
 
     @EventPattern('professor.created')
     async handleProfessorCreated(data: any) {
-        try {
-            const result = await this.getProfessorClasses.execute({
-                username: data.institutionalEmail,
-                password: data.institutionalPassword,
-            });
-
-            return result;
-        } catch (error) {
-            console.error(
-                '❌ Error processing professor.created event:',
-                error,
-            );
-            throw error;
-        }
+        await this.getProfessorClasses.execute({
+            profId: data.id,
+            username: data.institutionalEmail,
+            password: data.institutionalPassword,
+        });
     }
 }

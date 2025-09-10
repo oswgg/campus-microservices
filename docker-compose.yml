@@ -52,6 +52,7 @@ services:
     depends_on:
       - rabbitmq
       - postgres
+      - mongodb
 
   scrapper:
     build:
@@ -89,6 +90,20 @@ services:
       POSTGRES_DB: campus_professors
     ports:
       - '5433:5432'
+    volumes:
+      - pgsql_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:7-jammy
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: oswgg
+      MONGO_INITDB_ROOT_PASSWORD: rootOGG040520.dev
+      MONGO_INITDB_DATABASE: campus
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -111,3 +126,4 @@ services:
 volumes:
   rabbitmq_data:
   pgsql_data:
+  mongodb_data:

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ProfessorRepository } from '@/application/repositories/professor.repo';
 import { Professor } from '@/domain/entities/professor.entity';
-import { DrizzleService } from '../db/drizzle.service';
-import { professor } from '../db/schemas';
+import { DrizzleService } from '../db/drizzle/drizzle.service';
+import { professor } from '../db/drizzle/schemas';
 import { eq } from 'drizzle-orm';
+import { ClassData } from '@campus/types';
 
 @Injectable()
 export class ProfessorRepoImpl implements ProfessorRepository {
@@ -20,7 +21,12 @@ export class ProfessorRepoImpl implements ProfessorRepository {
                 })
                 .returning();
 
-            return new Professor(created.id, created.name, created.institutionalEmail, created.institutionalPassword);
+            return new Professor(
+                created.id,
+                created.name,
+                created.institutionalEmail,
+                created.institutionalPassword,
+            );
         } catch (error) {
             console.log(error);
             throw error;
@@ -37,7 +43,12 @@ export class ProfessorRepoImpl implements ProfessorRepository {
             return null;
         }
 
-        return new Professor(result.id, result.name, result.institutionalEmail, result.institutionalPassword);
+        return new Professor(
+            result.id,
+            result.name,
+            result.institutionalEmail,
+            result.institutionalPassword,
+        );
     }
 
     async findById(id: string): Promise<any> {
@@ -50,6 +61,17 @@ export class ProfessorRepoImpl implements ProfessorRepository {
             return null;
         }
 
-        return new Professor(result.id, result.name, result.institutionalEmail, result.institutionalPassword);
+        return new Professor(
+            result.id,
+            result.name,
+            result.institutionalEmail,
+            result.institutionalPassword,
+        );
+    }
+
+    async saveClasses(data: any): Promise<void> {}
+
+    async getClasses(profId: any): Promise<ClassData[]> {
+        return [];
     }
 }

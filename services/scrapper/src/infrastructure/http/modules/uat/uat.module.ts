@@ -3,7 +3,7 @@ import { UatController } from './uat.controller';
 import { ATTENDANCE_REPO_TOKEN } from '@/application/repositories/uat/attendance.repo';
 import { PuppeteerAttendanceRepo } from '@/infrastructure/services/uat/puppeteer.attendance.repo';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAMES, SERVICE_PORTS } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/types';
 import { GetProfessorClasses } from '@/application/use-cases/get-professor-classes';
 
 @Module({
@@ -13,7 +13,10 @@ import { GetProfessorClasses } from '@/application/use-cases/get-professor-class
                 name: SERVICE_NAMES.PROFESSOR,
                 transport: Transport.RMQ,
                 options: {
-                    urls: [process.env.RABBIT_URL],
+                    urls: [
+                        process.env.RABBIT_URL ||
+                            'amqp://oswgg:devOGG040520.dev@localhost:5672/',
+                    ],
                     queue: 'professor_queue',
                 },
             },
