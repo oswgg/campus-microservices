@@ -14,13 +14,10 @@
   },
   "dependencies": {
     "dotenv": "^17.2.2",
-    "mongodb": "^6.19.0",
-    "mongoose": "^8.18.1",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
     "@types/amqplib": "^0.10.7",
-    "@types/mongodb": "^4.0.6",
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
