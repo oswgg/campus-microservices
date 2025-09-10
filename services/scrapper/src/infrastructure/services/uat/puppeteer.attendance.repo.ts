@@ -17,17 +17,27 @@ export class PuppeteerAttendanceRepo implements AttendanceRepo, OnModuleInit {
     private page: Page;
 
     async onModuleInit() {
-        this.browser = await puppeteer.launch(UATAttendanceConfig.browser);
-        this.page = await this.browser.newPage();
-        await this.page.setRequestInterception(true);
-        this.page.on('request', (req) => {
-            const resourceType = req.resourceType();
-            if (['image', 'font', 'media'].includes(resourceType)) {
-                req.abort();
-            } else {
-                req.continue();
-            }
-        });
+        try {
+            console.log(
+                'Launching Puppeteer with config:',
+                UATAttendanceConfig.browser,
+            );
+            this.browser = await puppeteer.launch(UATAttendanceConfig.browser);
+            this.page = await this.browser.newPage();
+            await this.page.setRequestInterception(true);
+            this.page.on('request', (req) => {
+                const resourceType = req.resourceType();
+                if (['image', 'font', 'media'].includes(resourceType)) {
+                    req.abort();
+                } else {
+                    req.continue();
+                }
+            });
+            console.log('Puppeteer launched successfully');
+        } catch (error) {
+            console.error('Failed to launch Puppeteer:', error);
+            throw error;
+        }
     }
 
     async getProfessorClasses(

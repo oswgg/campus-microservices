@@ -2,15 +2,30 @@
  * Todos los selectores son obtenidos con la herramienta de desarrollo de google chrome.
  */
 
+const isDocker =
+    process.env.DOCKER_ENV === 'true' || process.env.NODE_ENV === 'production';
+
 export const UATAttendanceConfig = {
     browser: {
-        headless: false,
+        headless: isDocker ? true : false, // Automático basado en el entorno
+        executablePath: isDocker ? '/usr/bin/google-chrome-stable' : undefined,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor',
             '--window-size=1280,1280',
+            ...(isDocker
+                ? [
+                      '--no-zygote',
+                      '--single-process',
+                      '--disable-background-timer-throttling',
+                      '--disable-backgrounding-occluded-windows',
+                      '--disable-renderer-backgrounding',
+                  ]
+                : []),
         ],
         defaultViewport: { width: 1280, height: 1280 },
         timeout: 6000,
