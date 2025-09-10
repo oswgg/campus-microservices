@@ -1,0 +1,32 @@
+{
+  "name": "attendance-platform",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "dev": "npm run start:dev -w @campus/scrapper & npm run start:dev -w @campus/professors & npm run start:dev -w @campus/api",
+    "prod": "docker-compose -f docker-compose.yml up",
+    "prod:build": "docker-compose -f docker-compose.yml up --build",
+    "down": "docker-compose down",
+    "logs": "docker-compose logs -f"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.7",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.0.0",
+    "ts-loader": "^9.5.4",
+    "ts-node": "^10.0.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.0.0",
+    "webpack": "^5.101.3",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
