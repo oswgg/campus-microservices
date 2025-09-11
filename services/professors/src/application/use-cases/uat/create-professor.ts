@@ -43,7 +43,9 @@ export class CreateProfessor {
 
         try {
             this.scrappingService.emit('professor.created', eventData);
-        } catch (error) {}
+        } catch (error) {
+            console.error('Error emitting professor.created event:', error);
+        }
 
         return newProfessor;
     }

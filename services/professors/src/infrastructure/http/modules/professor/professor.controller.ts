@@ -1,12 +1,7 @@
-import { Controller, Inject } from '@nestjs/common';
-import {
-    ClientProvider,
-    ClientProxy,
-    EventPattern,
-    MessagePattern,
-} from '@nestjs/microservices';
+import { Controller } from '@nestjs/common';
+import { EventPattern } from '@nestjs/microservices';
 import { RegisterProfessorEvent } from '@/domain/events/register.event';
-import { ClassData, SERVICE_NAMES } from '@campus/types';
+import { ClassData } from '@campus/types';
 import { CreateProfessor } from '@/application/use-cases/uat/create-professor';
 import { SaveProfessorClasses } from '@/application/use-cases/uat/save-professor-classes';
 import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-classes';
@@ -22,17 +17,17 @@ export class ProfessorController {
         private readonly takeAttendance: TakeAttendance,
     ) {}
 
-    @MessagePattern({ cmd: 'register' })
+    @EventPattern('professor.register')
     async register(data: RegisterProfessorEvent) {
         return this.createProfessor.execute(data);
     }
 
-    @MessagePattern({ cmd: 'get_classes' })
+    @EventPattern('professor.get_classes')
     async getClasses(data: { profId: string }) {
         return await this.getProfessorClasses.execute(data.profId);
     }
 
-    @MessagePattern({ cmd: 'take_attendance_for_class' })
+    @EventPattern('professor.take_attendance_for_class')
     async handleTakeAttendance(data: TakeAttendanceDto) {
         return await this.takeAttendance.execute(data);
     }

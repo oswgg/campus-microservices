@@ -1,3 +1,4 @@
+import { config } from 'dotenv';
 import { Module } from '@nestjs/common';
 import { PROFESSOR_REPO_TOKEN } from '@/application/repositories/professor.repo';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -11,6 +12,10 @@ import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-
 import { ProfessorController } from './professor.controller';
 import { TakeAttendance } from '@/application/use-cases/uat/take-attendance';
 
+const envFile =
+    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
+config({ path: envFile });
+
 @Module({
     imports: [
         ClientsModule.register([
@@ -18,10 +23,7 @@ import { TakeAttendance } from '@/application/use-cases/uat/take-attendance';
                 name: SERVICE_NAMES.SCRAPER,
                 transport: Transport.RMQ,
                 options: {
-                    urls: [
-                        process.env.RABBIT_URL ||
-                            'amqp://oswgg:devOGG040520.dev@localhost:5672/',
-                    ],
+                    urls: [process.env.RABBIT_URL],
                     queue: 'scrapping_q',
                 },
             },

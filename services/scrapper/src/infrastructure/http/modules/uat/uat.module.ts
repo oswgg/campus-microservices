@@ -1,3 +1,4 @@
+import { config } from 'dotenv';
 import { Module } from '@nestjs/common';
 import { UatController } from './uat.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -15,6 +16,10 @@ import { ADMIN_UAT_ACTIONS_SERVICE_TOKEN } from '@/domain/services/uat/admin/act
 import { AdminUATPuppeteerActionsService } from '@/infrastructure/services/uat/admin/actions.puppeteer.service';
 import { TakeAttendance } from '@/application/use-cases/take-attendace';
 
+const envFile =
+    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
+config({ path: envFile });
+
 @Module({
     imports: [
         ClientsModule.register([
@@ -22,10 +27,7 @@ import { TakeAttendance } from '@/application/use-cases/take-attendace';
                 name: SERVICE_NAMES.PROFESSOR,
                 transport: Transport.RMQ,
                 options: {
-                    urls: [
-                        process.env.RABBIT_URL ||
-                            'amqp://oswgg:devOGG040520.dev@localhost:5672/',
-                    ],
+                    urls: [process.env.RABBIT_URL],
                     queue: 'professor_queue',
                 },
             },

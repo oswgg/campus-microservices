@@ -90,7 +90,6 @@ export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
         await page.click('#btnGuardar_generalesSIF');
 
         // Esperar a que aparezca el popup de confirmación
-        console.log('⏳ Esperando popup de confirmación...');
         await page.waitForSelector('#alertaGenericoSIFBotonOK', {
             timeout: 15000,
         });
@@ -98,7 +97,6 @@ export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
 
         // Hacer click en el botón OK del popup
         await page.click('#alertaGenericoSIFBotonOK');
-        console.log('✓ Asistencia guardada correctamente');
 
         await sleep(500);
     }
@@ -360,7 +358,6 @@ export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
             return resultado;
         }, AdminUATConfig.selectors.grids.asistencias);
 
-        console.log(`✓ Leídos ${datos.length} estudiantes`);
         return datos;
     }
 }

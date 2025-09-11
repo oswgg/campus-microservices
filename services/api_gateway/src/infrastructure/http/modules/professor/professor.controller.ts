@@ -67,7 +67,7 @@ export class ProfessorController {
     async registerProfessor(@Body() body: RegisterProfessorDto) {
         try {
             const response = await firstValueFrom(
-                this.professorService.send({ cmd: 'register' }, body),
+                this.professorService.send('professor.register', body),
             );
             return {
                 status: HttpStatus.CREATED,
@@ -75,6 +75,7 @@ export class ProfessorController {
                 data: response,
             };
         } catch (error) {
+            console.log(error);
             return { error: 'Failed to register professor' };
         }
     }
@@ -124,10 +125,9 @@ export class ProfessorController {
     ): Promise<ClassData[] | { error: string }> {
         try {
             const classes = await firstValueFrom(
-                this.professorService.send(
-                    { cmd: 'get_classes' },
-                    { profId: id },
-                ),
+                this.professorService.send('professor.get_classes', {
+                    profId: id,
+                }),
             );
             return classes;
         } catch (error) {
@@ -165,7 +165,7 @@ export class ProfessorController {
     async takeAttendanceForClass(@Body() body: TakeAttendanceDto) {
         try {
             const response = this.professorService.send(
-                { cmd: 'take_attendance_for_class' },
+                'professor.take_attendance_for_class',
                 body,
             );
 
