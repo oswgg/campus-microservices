@@ -82,16 +82,11 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
                 .updateOne(
                     { _id: new ObjectId(profId) },
                     { $set: { classes: classes } },
-                    { upsert: true },
                 );
 
             if (result.matchedCount === 0) {
                 throw new Error('Professor not found');
             }
-
-            console.log(`Classes saved for professor ${profId}`);
-
-            console.log(result);
         } catch (error) {
             console.log(error);
             throw error;

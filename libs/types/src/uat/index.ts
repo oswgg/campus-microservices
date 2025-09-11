@@ -10,7 +10,6 @@ export interface ClassData {
 }
 
 export type UATCredentials = {
-    profId: string;
     username: string;
     password: string;
 };

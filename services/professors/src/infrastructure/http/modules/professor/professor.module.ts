@@ -9,6 +9,7 @@ import { SaveProfessorClasses } from '@/application/use-cases/uat/save-professor
 import { CreateProfessor } from '@/application/use-cases/uat/create-professor';
 import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-classes';
 import { ProfessorController } from './professor.controller';
+import { TakeAttendance } from '@/application/use-cases/uat/take-attendance';
 
 @Module({
     imports: [
@@ -22,11 +23,6 @@ import { ProfessorController } from './professor.controller';
                             'amqp://oswgg:devOGG040520.dev@localhost:5672/',
                     ],
                     queue: 'scrapping_q',
-                    queueOptions: {
-                        durable: true,
-                    },
-                    exchange: 'scrapping.exchange',
-                    exchangeType: 'direct',
                 },
             },
         ]),
@@ -41,6 +37,7 @@ import { ProfessorController } from './professor.controller';
         CreateProfessor,
         SaveProfessorClasses,
         GetProfessorClasses,
+        TakeAttendance,
     ],
     controllers: [ProfessorController],
 })

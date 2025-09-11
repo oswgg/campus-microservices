@@ -14,6 +14,17 @@ import { SERVICE_NAMES, SERVICE_PORTS } from '@campus/types';
                     port: SERVICE_PORTS.PROFESSOR,
                 },
             },
+            {
+                name: SERVICE_NAMES.SCRAPER,
+                transport: Transport.RMQ,
+                options: {
+                    urls: [
+                        process.env.RABBITMQ_URL ||
+                            'amqp://oswgg:devOGG040520.dev@localhost:5672/',
+                    ],
+                    queue: 'scrapping_q',
+                },
+            },
         ]),
     ],
     controllers: [ProfessorController],

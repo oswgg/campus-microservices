@@ -1,37 +1,32 @@
 import { SERVICE_NAMES, UATCredentials } from '@campus/types';
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import {
-    ATTENDANCE_REPO_TOKEN,
-    AttendanceRepo,
-} from '../repositories/uat/attendance.repo';
+    ADMIN_UAT_REPO_TOKEN,
+    AdminUATRepo,
+} from '../repositories/uat/admin/uat-admin.repo';
 
+@Injectable()
 export class GetProfessorClasses {
     constructor(
         @Inject(SERVICE_NAMES.PROFESSOR)
         private readonly professorService: ClientProxy,
-        @Inject(ATTENDANCE_REPO_TOKEN)
-        private readonly attendanceRepo: AttendanceRepo,
+        @Inject(ADMIN_UAT_REPO_TOKEN)
+        private readonly attendanceRepo: AdminUATRepo,
     ) {}
 
-    async execute(crendential: UATCredentials) {
-        const classes =
-            await this.attendanceRepo.getProfessorClasses(crendential);
+    async execute(data: { id: string; username: string; password: string }) {
+        const classes = await this.attendanceRepo.getProfessorClasses({
+            id: data.id,
+            username: data.username,
+            password: data.password,
+        });
 
-        console.log(
-            'GetProfessorClasses - About to emit event with classes:',
-            classes,
-        );
-
-        // Emit the event (fire-and-forget)
         this.professorService.emit('professor.getted_classes', {
-            profId: crendential.profId,
+            profId: data.id,
             classes,
         });
 
-        console.log('GetProfessorClasses - Event emitted successfully');
-
-        console.log('GetProfessorClasses - Classes fetched:', classes);
         return classes;
     }
 }

@@ -5,7 +5,7 @@
 const isDocker =
     process.env.DOCKER_ENV === 'true' || process.env.NODE_ENV === 'production';
 
-export const UATAttendanceConfig = {
+export const AdminUATConfig = {
     browser: {
         headless: isDocker ? true : false, // Automático basado en el entorno
         executablePath: isDocker ? '/usr/bin/google-chrome-stable' : undefined,
