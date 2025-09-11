@@ -24,10 +24,14 @@ async function bootstrap() {
     );
     await micro.listen();
 
-    // Dummy HTTP server just to satisfy Render port scan
-    const app = express();
-    app.get('/', (_, res) => res.send('OK'));
-    app.listen(process.env.PORT || 3000);
+    // 🟢 Servidor HTTP fantasma para Render
+    const dummy = express();
+    dummy.get('/', (_, res) => res.send('OK'));
+    dummy.listen(Number(process.env.PORT) || 3000, '0.0.0.0', () => {
+        console.log(
+            `Dummy HTTP server listening on port ${process.env.PORT || 3000}`,
+        );
+    });
 }
 
 bootstrap();
