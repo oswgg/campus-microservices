@@ -44,7 +44,7 @@ async function bootstrap() {
         ],
     });
 
-    const port = process.env.PORT;
+    const port = process.env.API_GATEWAY_PORT;
     await app.listen(port);
 }
 

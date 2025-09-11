@@ -11,7 +11,7 @@ import { SERVICE_NAMES, SERVICE_PORTS } from '@campus/types';
                 transport: Transport.TCP,
                 options: {
                     host: process.env.PROFESSOR_HOST,
-                    port: SERVICE_PORTS.PROFESSOR,
+                    port: Number(process.env.PROFESSORS_PORT) || 4352,
                 },
             },
             {
