@@ -77,6 +77,9 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
 
     async saveClasses(profId: any, classes: ClassData[]): Promise<void> {
         try {
+            console.log(
+                `Saving ${classes.length} classes for professor ${profId}...`,
+            );
             const result = await this.mongo.db
                 .collection('professors')
                 .updateOne(

@@ -38,6 +38,8 @@ export class AdminUATRepoImpl implements AdminUATRepo {
 
         const { id, page } = result;
 
+        console.log('Opening new browser to get professor classes...');
+
         await this.authService.login(page, credentials);
         await this.navigationService.openMainMenu(page);
         await this.navigationService.goToControlAsistencia(page);

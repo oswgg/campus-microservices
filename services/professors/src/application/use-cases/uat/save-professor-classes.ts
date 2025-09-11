@@ -13,5 +13,6 @@ export class SaveProfessorClasses {
 
     async execute(profId: any, classes: ClassData[]) {
         await this.professorRepo.saveClasses(profId, classes);
+        console.log(`Classes saved for professor ${profId}`);
     }
 }

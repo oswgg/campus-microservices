@@ -37,6 +37,7 @@ export class ProfessorController {
         profId: any;
         classes: ClassData[];
     }) {
+        console.log('Received professor.getted_classes event:', data);
         await this.saveProfessorClasses.execute(data.profId, data.classes);
     }
 

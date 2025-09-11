@@ -16,6 +16,8 @@ export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
         const materias = await this.readTablaMaterias(page);
         const withStudents = await this.fillStudentsForClasses(page, materias);
 
+        console.log(`✓ Found ${withStudents.length} classes`);
+
         return withStudents.map(({ selector, ...rest }) => rest);
     }
 

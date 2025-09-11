@@ -28,7 +28,7 @@ export const AdminUATConfig = {
                 : []),
         ],
         defaultViewport: { width: 1280, height: 1280 },
-        timeout: 6000,
+        timeout: 70000,
     },
     urls: {
         login: 'https://administracionescolar.uat.edu.mx/Login',

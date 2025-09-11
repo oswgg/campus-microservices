@@ -17,6 +17,7 @@ export class UatController {
         institutionalEmail: string;
         institutionalPassword: string;
     }) {
+        console.log('Received professor.created event:', data);
         await this.getProfessorClasses.execute({
             id: data.id,
             username: data.institutionalEmail,

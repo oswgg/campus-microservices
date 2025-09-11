@@ -27,6 +27,8 @@ export class GetProfessorClasses {
             classes,
         });
 
+        console.log('Emitted professor.getted_classes event');
+
         return classes;
     }
 }
