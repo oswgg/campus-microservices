@@ -1,7 +1,7 @@
 FROM ghcr.io/puppeteer/puppeteer:22.10.0
 
 ENV DOCKER_ENV=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
 WORKDIR /app
 
