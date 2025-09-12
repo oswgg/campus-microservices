@@ -1,9 +1,7 @@
 FROM ghcr.io/puppeteer/puppeteer:22.10.0
 
-# Set environment variables for Docker
 ENV DOCKER_ENV=true
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
