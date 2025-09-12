@@ -14,6 +14,7 @@ import { Page } from 'puppeteer';
 export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
     async getProfessorClasses(page: Page): Promise<ClassData[]> {
         const materias = await this.readTablaMaterias(page);
+        await sleep(1000);
         const withStudents = await this.fillStudentsForClasses(page, materias);
 
         console.log(`✓ Found ${withStudents.length} classes`);

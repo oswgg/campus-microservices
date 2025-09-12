@@ -7,7 +7,6 @@ services:
     ports:
       - '4351:4351'
     env_file:
-      - .env
       - ./services/api_gateway/.env
     develop:
       watch:
@@ -34,7 +33,6 @@ services:
     ports:
       - '4352:4352'
     env_file:
-      - .env
       - ./services/professors/.env
     develop:
       watch:
@@ -62,7 +60,6 @@ services:
     ports:
       - '4353:4353'
     env_file:
-      - .env
       - ./services/scrapper/.env
     develop:
       watch:

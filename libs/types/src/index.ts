@@ -14,7 +14,7 @@ export const SERVICE_NAMES = {
 export const SERVICE_PORTS = {
     PROFESSOR: 4352,
     SCRAPER: 4353,
-    API_GATEWAY: 3000,
+    API_GATEWAY: 4351,
 };
 
 export * from './uat';

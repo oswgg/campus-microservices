@@ -16,8 +16,8 @@ async function bootstrap() {
         {
             transport: Transport.TCP,
             options: {
-                host: process.env.PROFESSORS_HOST || '0.0.0.0',
-                port: Number(process.env.PROFESSORS_PORT) || 4352,
+                host: process.env.HOST,
+                port: Number(process.env.PORT),
             },
         },
     );
