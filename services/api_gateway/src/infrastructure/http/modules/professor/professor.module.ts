@@ -1,33 +1,52 @@
-import { config } from 'dotenv';
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ProfessorController } from './professor.controller';
 import { SERVICE_NAMES } from '@campus/types';
-
-const envFile =
-    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
-config({ path: envFile });
+import { ConfigService } from '@nestjs/config';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { TOKEN_SERVICE_TOKEN } from '@/application/services/token.service';
+import { NestJwtService } from '@/infrastructure/services/jwt.nest';
 
 @Module({
     imports: [
-        ClientsModule.register([
+        ClientsModule.registerAsync([
             {
                 name: SERVICE_NAMES.PROFESSOR,
-                transport: Transport.RMQ,
-                options: {
-                    urls: [process.env.RABBIT_URL],
-                    queue: 'professor_queue',
-                },
+                inject: [ConfigService],
+                useFactory: (config: ConfigService) => ({
+                    transport: Transport.RMQ,
+                    options: {
+                        urls: [config.get<string>('RABBIT_URL')],
+                        queue: 'professor_queue',
+                    },
+                }),
             },
             {
                 name: SERVICE_NAMES.SCRAPER,
-                transport: Transport.RMQ,
-                options: {
-                    urls: [process.env.RABBIT_URL],
-                    queue: 'scrapping_q',
-                },
+                inject: [ConfigService],
+                useFactory: (config: ConfigService) => ({
+                    transport: Transport.RMQ,
+                    options: {
+                        urls: [config.get<string>('RABBIT_URL')],
+                        queue: 'scrapping_q',
+                    },
+                }),
             },
         ]),
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => ({
+                secret: config.get<string>('JWT_SECRET'),
+                signOptions: { expiresIn: '24h' },
+            }),
+        }),
+    ],
+    providers: [
+        {
+            provide: TOKEN_SERVICE_TOKEN,
+            inject: [JwtService],
+            useFactory: (service) => new NestJwtService(service),
+        },
     ],
     controllers: [ProfessorController],
 })

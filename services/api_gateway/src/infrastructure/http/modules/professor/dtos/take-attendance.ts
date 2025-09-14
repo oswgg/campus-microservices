@@ -9,13 +9,6 @@ import {
 
 export class TakeAttendanceDto {
     @ApiProperty({
-        example: 1,
-        description: 'ID del profesor que toma la asistencia',
-    })
-    @IsNotEmpty({ message: 'Professor ID is required' })
-    profId: string | number;
-
-    @ApiProperty({
         example: 'G',
         description: 'Grupo de la clase',
         minLength: 1,
