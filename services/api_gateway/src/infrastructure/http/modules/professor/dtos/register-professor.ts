@@ -1,3 +1,4 @@
+import { RegisterProfessorInput } from '@campus/types';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     IsEmail,
@@ -7,7 +8,7 @@ import {
     MaxLength,
 } from 'class-validator';
 
-export class RegisterProfessorDto {
+export class RegisterProfessorDto implements RegisterProfessorInput {
     @ApiProperty({
         example: 'Dr. María González',
         description: 'The full name of the professor',

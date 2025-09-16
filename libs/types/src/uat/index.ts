@@ -9,6 +9,19 @@ export interface ClassData {
     }[];
 }
 
+export interface RegisterProfessorInput {
+    name: string;
+    institutionalEmail: string;
+    institutionalPassword: string;
+}
+
+export interface RegisterProfessorOutput {
+    id: any;
+    name: string;
+    email: string;
+    token: any;
+}
+
 export type UATCredentials = {
     username: string;
     password: string;
