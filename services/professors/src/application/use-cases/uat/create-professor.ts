@@ -7,6 +7,7 @@ import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,
 } from '@/application/repositories/professor.repo';
+import { firstValueFrom } from 'rxjs';
 
 export class CreateProfessor {
     constructor(
@@ -23,6 +24,20 @@ export class CreateProfessor {
         );
         if (professor) {
             throw new Error('Professor with this email already exists');
+        }
+
+        const validCredentials = await firstValueFrom(
+            this.scrappingService.send(
+                { cmd: 'professor.validate_credentials' },
+                {
+                    username: data.institutionalEmail,
+                    password: data.institutionalPassword,
+                },
+            ),
+        );
+
+        if (!validCredentials.success) {
+            throw new Error(`Invalid credentials: ${validCredentials.message}`);
         }
 
         const newProfessor = await this.professorRepo.create(

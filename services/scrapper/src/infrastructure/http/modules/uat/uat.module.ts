@@ -15,6 +15,7 @@ import { ADMIN_UAT_NAVIGATION_SERVICE_TOKEN } from '@/domain/services/uat/admin/
 import { ADMIN_UAT_ACTIONS_SERVICE_TOKEN } from '@/domain/services/uat/admin/actions.service';
 import { AdminUATPuppeteerActionsService } from '@/infrastructure/services/uat/admin/actions.puppeteer.service';
 import { TakeAttendance } from '@/application/use-cases/take-attendace';
+import { ValidateCredentials } from '@/application/use-cases/validate-credentials';
 
 const envFile =
     process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
@@ -61,6 +62,7 @@ config({ path: envFile });
         // Use cases
         GetProfessorClasses,
         TakeAttendance,
+        ValidateCredentials,
     ],
     controllers: [UatController],
 })

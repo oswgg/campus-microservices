@@ -1,6 +1,10 @@
 import { ClassData, UATCredentials } from '@campus/types';
 
 export interface AdminUATRepo {
+    validateCredentials(
+        data: UATCredentials,
+    ): Promise<{ success: boolean; message: string }>;
+
     getProfessorClasses(
         credentials: UATCredentials & { id: any },
     ): Promise<ClassData[]>;
