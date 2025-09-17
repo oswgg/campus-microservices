@@ -31,6 +31,28 @@ export class AdminUATRepoImpl implements AdminUATRepo {
         private readonly actionsService: AdminUATActionsService,
     ) {}
 
+    async validateCredentials(
+        data: UATCredentials,
+    ): Promise<{ success: boolean; message: string }> {
+        const result = await this.browserService.newPage();
+        const { id, page } = result;
+
+        console.log('Opening new browser to validate credentials...');
+
+        try {
+            const { success, message } = await this.authService.login(
+                page,
+                data,
+            );
+
+            await this.browserService.closePage(id);
+            return { success, message };
+        } catch (error) {
+            await this.browserService.closePage(id);
+            return { success: false, message: 'Invalid credentials' };
+        }
+    }
+
     async getProfessorClasses(
         credentials: UATCredentials,
     ): Promise<ClassData[]> {

@@ -39,6 +39,10 @@ export const AdminUATConfig = {
             password: "input[name='txtContrasenia']",
             checkbox: '.dx-checkbox-icon',
             submitButton: '#btnIngresar',
+            error: {
+                modal: '.dx-overlay-content.dx-popup-normal.dx-popup-draggable.dx-resizable',
+                message: '#alertaGenericoSIFLabel',
+            },
         },
         navigation: {
             secretaria: '[aria-label="Secretaría de Gestión Escolar"]',
