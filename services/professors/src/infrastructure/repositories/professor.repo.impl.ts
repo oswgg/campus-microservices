@@ -4,7 +4,7 @@ import { Professor } from '@/domain/entities/professor.entity';
 import { DrizzleService } from '../db/drizzle/drizzle.service';
 import { professor } from '../db/drizzle/schemas';
 import { eq } from 'drizzle-orm';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 
 @Injectable()
 export class ProfessorRepoImpl implements ProfessorRepository {

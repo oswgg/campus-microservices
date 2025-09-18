@@ -3,7 +3,7 @@ import {
     ProfessorRepository,
 } from '@/application/repositories/professor.repo';
 import { TakeAttendanceDto } from '@/infrastructure/http/modules/professor/dtos/take-attendance';
-import { SERVICE_NAMES } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/libs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 

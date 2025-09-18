@@ -2,7 +2,7 @@ import {
     ClassData,
     RegisterProfessorOutput,
     SERVICE_NAMES,
-} from '@campus/types';
+} from '@campus/libs';
 import {
     Body,
     Controller,
@@ -13,6 +13,8 @@ import {
     InternalServerErrorException,
     Req,
     HttpStatus,
+    BadRequestException,
+    Logger,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
@@ -20,6 +22,7 @@ import {
     RegisterProfessorDocumentation,
     GetProfessorClassesDocumentation,
     TakeAttendanceDocumentation,
+    LoginProfessorDocumentation,
 } from './professor.swagger';
 import { firstValueFrom } from 'rxjs';
 import { RegisterProfessorDto } from './dtos/register-professor';
@@ -32,12 +35,15 @@ import {
     TokenService,
 } from '@/application/services/token.service';
 import { DomainApiResponse, TokenOutput } from '@/domain/api-response';
+import { LoginProfessorDto } from './dtos/login-professor';
 
 @ApiTags('Professors')
 @Controller('professors')
 @UseGuards(JwtAuthGuard)
 @RequiredApp(SERVICE_NAMES.PROFESSOR)
 export class ProfessorController {
+    logger = new Logger(ProfessorController.name);
+
     constructor(
         @Inject(SERVICE_NAMES.PROFESSOR)
         private readonly professorService: ClientProxy,
@@ -69,9 +75,48 @@ export class ProfessorController {
                 }),
             };
         } catch (error) {
+            this.logger.error('Error registering professor', error);
             throw new InternalServerErrorException({
                 error: 'Internal Server Error',
                 message: 'Failed to register professor',
+            });
+        }
+    }
+
+    @Public()
+    @Post('login')
+    @LoginProfessorDocumentation()
+    async loginProfessor(
+        @Body() body: LoginProfessorDto,
+    ): Promise<DomainApiResponse<any> & TokenOutput> {
+        try {
+            const professor = await firstValueFrom(
+                this.professorService.send('professor.login', body),
+            );
+
+            if (!professor) {
+                throw new BadRequestException({
+                    error: 'Invalid Credentials',
+                    message: 'Email or password is incorrect',
+                });
+            }
+
+            return {
+                status: HttpStatus.OK,
+                message: 'Login successful',
+                data: professor,
+                token: await this.tokenService.sign({
+                    id: professor.id,
+                    name: professor.name,
+                    email: professor.email,
+                    app: SERVICE_NAMES.PROFESSOR,
+                }),
+            };
+        } catch (error) {
+            this.logger.error('Error logging in professor', error, undefined);
+            throw new InternalServerErrorException({
+                error: 'Internal Server Error',
+                message: 'Failed to login professor',
             });
         }
     }
@@ -93,6 +138,7 @@ export class ProfessorController {
                 data: classes,
             };
         } catch (error) {
+            this.logger.error('Error fetching professor classes', error);
             return { error: 'Failed to fetch professor classes' };
         }
     }
@@ -115,6 +161,7 @@ export class ProfessorController {
                 data: response,
             };
         } catch (error) {
+            this.logger.error('Error initiating take attendance', error);
             return { error: 'Failed to initiate take attendance process' };
         }
     }

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/swagger';
 import { RegisterProfessorDto } from './dtos/register-professor';
 import { TakeAttendanceDto } from './dtos/take-attendance';
+import { LoginProfessorDto } from './dtos/login-professor';
 
 /**
  * Documentación para el endpoint de registro de profesores
@@ -44,14 +45,13 @@ export const RegisterProfessorDocumentation = () =>
                             },
                             institutionalEmail: {
                                 type: 'string',
-                                example: 'profesor@profesores.uat.edu.mx',
-                            },
-                            token: {
-                                type: 'string',
-                                example:
-                                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                                example: 'maria.gonzalez@uat.edu.mx',
                             },
                         },
+                    },
+                    token: {
+                        type: 'string',
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
                     },
                 },
             },
@@ -67,7 +67,7 @@ export const RegisterProfessorDocumentation = () =>
                         items: { type: 'string' },
                         example: [
                             'institutionalEmail must be a valid email',
-                            'password is required',
+                            'institutionalPassword is required',
                         ],
                     },
                     error: { type: 'string', example: 'Bad Request' },
@@ -86,6 +86,67 @@ export const RegisterProfessorDocumentation = () =>
                         type: 'string',
                         example: 'Failed to register professor',
                     },
+                },
+            },
+        }),
+    );
+
+export const LoginProfessorDocumentation = () =>
+    applyDecorators(
+        ApiOperation({
+            summary: 'Login de profesor',
+            description:
+                'Autentica a un profesor utilizando sus credenciales institucionales. Este endpoint es público y no requiere autenticación.',
+        }),
+        ApiBody({
+            type: LoginProfessorDto,
+            description:
+                'Credenciales de inicio de sesión del profesor incluyendo correo electrónico y contraseña',
+        }),
+        ApiResponse({
+            status: 200,
+            description: 'Inicio de sesión exitoso',
+            schema: {
+                type: 'object',
+                properties: {
+                    status: { type: 'number', example: 200 },
+                    message: { type: 'string', example: 'Login successful' },
+                    data: {
+                        type: 'object',
+                        properties: {
+                            name: {
+                                type: 'string',
+                                example: 'Dr. María González',
+                            },
+                            institutionalEmail: {
+                                type: 'string',
+                                example: 'maria.gonzalez@docentes.uat.edu.mx',
+                            },
+                        },
+                    },
+                    token: {
+                        type: 'string',
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+                    },
+                },
+            },
+        }),
+        ApiResponse({
+            status: 400,
+            description: 'Datos de entrada inválidos',
+            schema: {
+                type: 'object',
+                properties: {
+                    message: {
+                        type: 'array',
+                        items: { type: 'string' },
+                        example: [
+                            'institutionalEmail must be a valid email',
+                            'institutionalPassword is required',
+                        ],
+                    },
+                    error: { type: 'string', example: 'Bad Request' },
+                    statusCode: { type: 'number', example: 400 },
                 },
             },
         }),

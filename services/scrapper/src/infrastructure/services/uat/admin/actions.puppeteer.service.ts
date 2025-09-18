@@ -6,7 +6,7 @@ import {
 } from '@/domain/entities/uat';
 import { AdminUATActionsService } from '@/domain/services/uat/admin/actions.service';
 import { sleep } from '@/domain/utils/sleep';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 import { Injectable } from '@nestjs/common';
 import { Page } from 'puppeteer';
 

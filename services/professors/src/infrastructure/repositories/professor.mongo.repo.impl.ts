@@ -2,7 +2,7 @@ import { ProfessorRepository } from '@/application/repositories/professor.repo';
 import { Professor } from '@/domain/entities/professor.entity';
 import { MongoService } from '../db/mongo/mongo.service';
 import { Injectable } from '@nestjs/common';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 import { ObjectId } from 'mongodb';
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 
 export interface AdminUATActionsService {
     getProfessorClasses(page: any): Promise<ClassData[]>;

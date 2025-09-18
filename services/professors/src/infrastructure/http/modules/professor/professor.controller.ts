@@ -1,12 +1,13 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { RegisterProfessorEvent } from '@/domain/events/register.event';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 import { CreateProfessor } from '@/application/use-cases/uat/create-professor';
 import { SaveProfessorClasses } from '@/application/use-cases/uat/save-professor-classes';
 import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-classes';
 import { TakeAttendanceDto } from './dtos/take-attendance';
 import { TakeAttendance } from '@/application/use-cases/uat/take-attendance';
+import { LoginProfessor } from '@/application/use-cases/uat/login-professor';
 
 @Controller()
 export class ProfessorController {
@@ -15,11 +16,20 @@ export class ProfessorController {
         private readonly saveProfessorClasses: SaveProfessorClasses,
         private readonly getProfessorClasses: GetProfessorClasses,
         private readonly takeAttendance: TakeAttendance,
+        private readonly loginProfessor: LoginProfessor,
     ) {}
 
     @EventPattern('professor.register')
     async register(data: RegisterProfessorEvent) {
         return this.createProfessor.execute(data);
+    }
+
+    @MessagePattern('professor.login')
+    async login(data: {
+        institutionalEmail: string;
+        institutionalPassword: string;
+    }) {
+        return await this.loginProfessor.execute(data);
     }
 
     @EventPattern('professor.get_classes')

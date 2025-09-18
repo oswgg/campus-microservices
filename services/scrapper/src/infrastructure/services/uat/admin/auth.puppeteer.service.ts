@@ -1,6 +1,6 @@
 import { AdminUATConfig } from '@/config/uat/attendance.config';
 import { AdminUATAuthService } from '@/domain/services/uat/admin/auth.service';
-import { UATCredentials } from '@campus/types';
+import { UATCredentials } from '@campus/libs';
 import { Injectable } from '@nestjs/common';
 import { Page } from 'puppeteer';
 

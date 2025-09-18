@@ -3,7 +3,7 @@ import { TakeAttendance } from '@/application/use-cases/take-attendace';
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { TakeAttendanceForClassDto } from './dtos/take-attendance-for-class';
-import { UATCredentials } from '@campus/types';
+import { UATCredentials } from '@campus/libs';
 import { ValidateCredentials } from '@/application/use-cases/validate-credentials';
 
 @Controller()

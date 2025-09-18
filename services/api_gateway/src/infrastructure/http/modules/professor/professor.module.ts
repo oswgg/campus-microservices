@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ProfessorController } from './professor.controller';
-import { SERVICE_NAMES } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/libs';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TOKEN_SERVICE_TOKEN } from '@/application/services/token.service';

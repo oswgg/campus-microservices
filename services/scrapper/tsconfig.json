@@ -19,10 +19,11 @@
     "noFallthroughCasesInSwitch": false,
     "rootDir": "./src",
     "paths": {
-      "@campus/*": ["./libs/*/src"],
+      "@campus/libs": ["../../libs/src"],
+      "@campus/*": ["../../libs/*/src"],
       "@/*": ["src/*"]
     },
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "../../libs"]
+  "exclude": ["node_modules", "dist"]
 }

@@ -1,26 +1,8 @@
-import { RegisterProfessorInput } from '@campus/libs';
+import { UATCredentials } from '@campus/libs';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-    IsEmail,
-    IsNotEmpty,
-    IsString,
-    MinLength,
-    MaxLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class RegisterProfessorDto implements RegisterProfessorInput {
-    @ApiProperty({
-        example: 'Dr. María González',
-        description: 'The full name of the professor',
-        minLength: 2,
-        maxLength: 100,
-    })
-    @IsNotEmpty({ message: 'Name is required' })
-    @IsString({ message: 'Name must be a string' })
-    @MinLength(2, { message: 'Name must be at least 2 characters long' })
-    @MaxLength(100, { message: 'Name cannot exceed 100 characters' })
-    name: string;
-
+export class LoginProfessorDto {
     @ApiProperty({
         example: 'maria.gonzalez@uat.edu.mx',
         description: 'The institutional email of the professor',

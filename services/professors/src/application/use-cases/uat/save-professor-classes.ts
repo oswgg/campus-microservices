@@ -1,4 +1,4 @@
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 import { Inject } from '@nestjs/common';
 import {
     PROFESSOR_REPO_TOKEN,
