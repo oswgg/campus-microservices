@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 import { Module } from '@nestjs/common';
 import { UatController } from './uat.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAMES } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/libs';
 import { GetProfessorClasses } from '@/application/use-cases/get-professor-classes';
 import { PuppeterBrowserService } from '@/infrastructure/services/browser/browser.puppeteer.service';
 import { AdminUATPuppeteerAuthService } from '@/infrastructure/services/uat/admin/auth.puppeteer.service';

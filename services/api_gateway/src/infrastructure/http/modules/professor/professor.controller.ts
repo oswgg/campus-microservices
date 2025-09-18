@@ -2,7 +2,7 @@ import {
     ClassData,
     RegisterProfessorOutput,
     SERVICE_NAMES,
-} from '@campus/types';
+} from '@campus/libs';
 import {
     Body,
     Controller,

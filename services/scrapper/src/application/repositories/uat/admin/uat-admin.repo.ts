@@ -1,4 +1,4 @@
-import { ClassData, UATCredentials } from '@campus/types';
+import { ClassData, UATCredentials } from '@campus/libs';
 
 export interface AdminUATRepo {
     validateCredentials(

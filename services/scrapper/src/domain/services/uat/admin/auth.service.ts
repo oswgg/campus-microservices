@@ -1,4 +1,4 @@
-import { UATCredentials } from '@campus/types';
+import { UATCredentials } from '@campus/libs';
 
 export interface AdminUATAuthService {
     login(

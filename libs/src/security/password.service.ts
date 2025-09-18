@@ -1,4 +1,4 @@
-import { PasswordService } from '@campus/types';
+import { PasswordService } from '../types/security';
 import * as crypto from 'crypto';
 
 export class CampusPasswordService implements PasswordService {

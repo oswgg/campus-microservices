@@ -1,3 +1,4 @@
+// Security related types and interfaces
 export interface PasswordService {
     compare(
         plainPassword: string,

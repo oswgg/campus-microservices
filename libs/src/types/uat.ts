@@ -1,3 +1,4 @@
+// UAT (University Academic Terminal) related types and interfaces
 export interface ClassData {
     group: string;
     classroom: string;

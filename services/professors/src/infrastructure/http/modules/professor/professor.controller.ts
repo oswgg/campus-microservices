@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { RegisterProfessorEvent } from '@/domain/events/register.event';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 import { CreateProfessor } from '@/application/use-cases/uat/create-professor';
 import { SaveProfessorClasses } from '@/application/use-cases/uat/save-professor-classes';
 import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-classes';

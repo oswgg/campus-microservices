@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { RegisterProfessorEvent } from '@/domain/events/register.event';
 import { Professor } from '@/domain/entities/professor.entity';
-import { SERVICE_NAMES } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/libs';
 import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,

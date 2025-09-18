@@ -3,7 +3,7 @@ import {
     ADMIN_UAT_REPO_TOKEN,
     AdminUATRepo,
 } from '../repositories/uat/admin/uat-admin.repo';
-import { UATCredentials } from '@campus/types';
+import { UATCredentials } from '@campus/libs';
 
 @Injectable()
 export class ValidateCredentials {

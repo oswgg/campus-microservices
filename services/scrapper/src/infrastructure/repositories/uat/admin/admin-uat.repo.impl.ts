@@ -10,7 +10,7 @@ import {
     ADMIN_UAT_NAVIGATION_SERVICE_TOKEN,
     AdminUATNavigationService,
 } from '@/domain/services/uat/admin/navigation.service';
-import { ClassData, UATCredentials } from '@campus/types';
+import { ClassData, UATCredentials } from '@campus/libs';
 import { Inject, Injectable } from '@nestjs/common';
 import { AdminUATRepo } from '@/application/repositories/uat/admin/uat-admin.repo';
 import {

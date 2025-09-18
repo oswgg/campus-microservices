@@ -4,7 +4,7 @@ import {
     AdminUATRepo,
 } from '../repositories/uat/admin/uat-admin.repo';
 import { TakeAttendanceForClassDto } from '@/infrastructure/http/modules/uat/dtos/take-attendance-for-class';
-import { SERVICE_NAMES } from '@campus/types';
+import { SERVICE_NAMES } from '@campus/libs';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()

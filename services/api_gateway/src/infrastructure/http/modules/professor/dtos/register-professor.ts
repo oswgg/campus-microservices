@@ -1,4 +1,4 @@
-import { RegisterProfessorInput } from '@campus/types';
+import { RegisterProfessorInput } from '@campus/libs';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     IsEmail,

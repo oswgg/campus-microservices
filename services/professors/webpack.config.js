@@ -7,7 +7,7 @@ module.exports = {
     target: 'node',
     externals: [
         nodeExternals({
-            allowlist: ['@campus/*']
+            allowlist: ['@campus/libs']
         })
     ],
     module: {
@@ -27,7 +27,7 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
         alias: {
-            '@campus/*': path.resolve(__dirname, '../../libs/*'),
+            '@campus/libs': path.resolve(__dirname, '../../libs/src'),
             '@': path.resolve(__dirname, 'src'),
         },
     },

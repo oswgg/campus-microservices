@@ -2,7 +2,7 @@ import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,
 } from '@/application/repositories/professor.repo';
-import { PASSWORD_SERVICE_TOKEN, PasswordService } from '@campus/types';
+import { PASSWORD_SERVICE_TOKEN, PasswordService } from '@campus/libs';
 import { Inject, Injectable } from '@nestjs/common';
 
 @Injectable()

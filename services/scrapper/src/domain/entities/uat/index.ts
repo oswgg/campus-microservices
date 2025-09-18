@@ -1,4 +1,4 @@
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 
 export interface ClassDataWithSelector extends ClassData {
     selector: string;

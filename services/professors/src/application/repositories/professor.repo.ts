@@ -1,5 +1,5 @@
 import { Professor } from '@/domain/entities/professor.entity';
-import { ClassData } from '@campus/types';
+import { ClassData } from '@campus/libs';
 
 export interface ProfessorRepository {
     findById(id: string): Promise<Professor | null>;
