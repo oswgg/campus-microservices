@@ -6,8 +6,7 @@
     },
     "include": [
         "src/**/*",
-        "../../libs/types/src/**/*",
-        "../../libs/mq/src/**/*"
+        "../../libs/**/*",
     ],
     "exclude": [
         "node_modules",

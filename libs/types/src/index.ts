@@ -18,3 +18,4 @@ export const SERVICE_PORTS = {
 };
 
 export * from './uat';
+export * from './security';

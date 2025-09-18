@@ -1,5 +1,6 @@
 {
   "references": [
-    { "path": "./libs/types" }
+    { "path": "./libs/types" },
+    { "path": "./libs/packages" }
   ],
 }

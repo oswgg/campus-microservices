@@ -17,9 +17,8 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "rootDir": "./src",
     "paths": {
-      "@campus/*": ["./libs/*/src"],
+      "@campus/*": ["../../libs/*/src"],
       "@/*": ["src/*"]
     },
   },

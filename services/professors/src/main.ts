@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './infrastructure/http/modules/app.module';
-import * as express from 'express';
 
 // Load environment variables based on NODE_ENV
 const envFile =
@@ -36,15 +35,6 @@ async function bootstrap() {
     );
 
     await Promise.all([tcpApp.listen(), rmqApp.listen()]);
-
-    // 🟢 Servidor HTTP fantasma para Render
-    const dummy = express();
-    dummy.get('/', (_, res) => res.send('OK'));
-    dummy.listen(Number(process.env.PORT) || 3000, '0.0.0.0', () => {
-        console.log(
-            `Dummy HTTP server listening on port ${process.env.PORT || 3000}`,
-        );
-    });
 }
 
 bootstrap();
