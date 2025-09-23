@@ -4,9 +4,7 @@ import { AdminUATConfig } from '@/config/uat/attendance.config';
 import { BrowserService } from '@/domain/services/browser.service';
 
 @Injectable()
-export class PuppeterBrowserService
-    implements BrowserService, OnModuleInit, OnModuleDestroy
-{
+export class PuppeterBrowserService implements BrowserService, OnModuleInit {
     private browser: Browser;
     private openPages: Map<string, Page> = new Map();
 
@@ -16,14 +14,8 @@ export class PuppeterBrowserService
             this.browser = await this.launchBrowser();
             console.log('Browser service initialized successfully');
         } catch (error) {
-            console.error('Failed to launch browser:', error);
+            console.error('Failed to launch browser', error);
             throw error;
-        }
-    }
-
-    async onModuleDestroy() {
-        if (this.browser) {
-            await this.closeBrowser(this.browser);
         }
     }
 

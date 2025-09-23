@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from '@/infrastructure/http/modules/app.module';
-import * as express from 'express';
 
 const envFile =
     process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
@@ -23,12 +22,6 @@ async function bootstrap() {
         },
     );
     await micro.listen();
-
-    const dummy = express();
-    dummy.get('/', (_, res) => res.send('OK'));
-    dummy.listen(Number(process.env.PORT), () => {
-        console.log(`Dummy HTTP server listening on port ${process.env.PORT}`);
-    });
 }
 
 bootstrap();
