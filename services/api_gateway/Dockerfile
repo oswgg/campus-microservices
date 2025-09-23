@@ -16,7 +16,6 @@ COPY services/api_gateway/package*.json ./services/api_gateway/
 COPY services/api_gateway/src ./services/api_gateway/src
 COPY services/api_gateway/tsconfig*.json ./services/api_gateway/
 COPY services/api_gateway/nest-cli.json ./services/api_gateway/
-COPY services/api_gateway/webpack.config.js ./services/api_gateway/
 
 # Install dependencies with workspace support
 RUN npm install --legacy-peer-deps

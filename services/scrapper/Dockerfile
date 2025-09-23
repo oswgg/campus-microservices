@@ -22,7 +22,6 @@ COPY services/scrapper/package*.json ./services/scrapper/
 COPY services/scrapper/src ./services/scrapper/src
 COPY services/scrapper/tsconfig*.json ./services/scrapper/
 COPY services/scrapper/nest-cli.json ./services/scrapper/
-COPY services/scrapper/webpack.config.js ./services/scrapper/
 
 # Change ownership to the puppeteer user
 RUN chown -R pptruser:pptruser /app
