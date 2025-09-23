@@ -1,9 +1,4 @@
 import {
-    ClassData,
-    RegisterProfessorOutput,
-    SERVICE_NAMES,
-} from '@campus/libs';
-import {
     Body,
     Controller,
     Inject,
@@ -36,6 +31,11 @@ import {
 } from '@/application/services/token.service';
 import { DomainApiResponse, TokenOutput } from '@/domain/api-response';
 import { LoginProfessorDto } from './dtos/login-professor';
+import {
+    ClassData,
+    RegisterProfessorOutput,
+    SERVICE_NAMES,
+} from '@campus/libs';
 
 @ApiTags('Professors')
 @Controller('professors')
