@@ -11,8 +11,8 @@ export class SaveProfessorClasses {
         private readonly professorRepo: ProfessorRepository,
     ) {}
 
-    async execute(profId: any, classes: ClassData[]) {
-        await this.professorRepo.saveClasses(profId, classes);
-        console.log(`Classes saved for professor ${profId}`);
+    async execute(profEmail: any, classes: ClassData[]) {
+        await this.professorRepo.saveClasses(profEmail, classes);
+        console.log(`Classes saved for professor ${profEmail}`);
     }
 }

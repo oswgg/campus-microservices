@@ -10,7 +10,7 @@ import {
     ADMIN_UAT_NAVIGATION_SERVICE_TOKEN,
     AdminUATNavigationService,
 } from '@/domain/services/uat/admin/navigation.service';
-import { ClassData, UATCredentials } from '@campus/libs';
+import { ClassData, TakeAttendanceDto, UATCredentials } from '@campus/libs';
 import { Inject, Injectable } from '@nestjs/common';
 import { AdminUATRepo } from '@/application/repositories/uat/admin/uat-admin.repo';
 import {
@@ -73,24 +73,17 @@ export class AdminUATRepoImpl implements AdminUATRepo {
         return classes;
     }
 
-    async takeAttendance(data: {
-        username: string;
-        password: string;
-        data: ClassData & {
-            date: string;
-            students: { number: number; name: string; present: boolean }[];
-        };
-    }): Promise<void> {
+    async takeAttendance(data: TakeAttendanceDto): Promise<void> {
         const result = await this.browserService.newPage();
         const { id, page } = result;
 
         await this.authService.login(page, {
-            username: data.username,
-            password: data.password,
+            username: data.profEmail,
+            password: data.encryptedPassword,
         });
         await this.navigationService.openMainMenu(page);
         await this.navigationService.goToControlAsistencia(page);
-        await this.actionsService.takeAttendance(page, data.data);
+        await this.actionsService.takeAttendance(page, data);
 
         await this.browserService.closePage(id);
     }

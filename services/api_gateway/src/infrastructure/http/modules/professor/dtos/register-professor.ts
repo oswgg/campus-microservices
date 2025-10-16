@@ -1,4 +1,4 @@
-import { RegisterProfessorInput } from '@campus/libs';
+import { RegisterProfessorDto } from '@campus/libs';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     IsEmail,
@@ -8,7 +8,7 @@ import {
     MaxLength,
 } from 'class-validator';
 
-export class RegisterProfessorDto implements RegisterProfessorInput {
+export class RegisterProfessorInput implements RegisterProfessorDto {
     @ApiProperty({
         example: 'Dr. María González',
         description: 'The full name of the professor',
@@ -31,12 +31,9 @@ export class RegisterProfessorDto implements RegisterProfessorInput {
     institutionalEmail: string;
 
     @ApiProperty({
-        example: 'securePassword123',
-        description: 'The password for the professor account',
-        minLength: 8,
-        maxLength: 50,
+        example: 'Y65ruAZiQnCq5/NkzBxiuYwwwqKyp/YOC94SdylAR5yllHkH...',
+        description: 'The encrypted password of the professor',
     })
     @IsNotEmpty({ message: 'Password is required' })
-    @IsString({ message: 'Password must be a string' })
-    institutionalPassword: string;
+    encryptedPassword: string;
 }

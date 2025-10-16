@@ -2,22 +2,26 @@ import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,
 } from '@/application/repositories/professor.repo';
-import { PASSWORD_SERVICE_TOKEN, PasswordService } from '@campus/libs';
-import { Inject, Injectable } from '@nestjs/common';
+import {
+    LoginProfessorDto,
+    SERVICE_NAMES,
+    UATCredentials,
+    ValidateCredentialsResponse,
+} from '@campus/libs';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class LoginProfessor {
     constructor(
         @Inject(PROFESSOR_REPO_TOKEN)
         private readonly professorRepo: ProfessorRepository,
-        @Inject(PASSWORD_SERVICE_TOKEN)
-        private readonly passwordService: PasswordService,
+        @Inject(SERVICE_NAMES.SCRAPER)
+        private readonly scrapperService: ClientProxy,
     ) {}
 
-    async execute(data: {
-        institutionalEmail: string;
-        institutionalPassword: string;
-    }): Promise<any> {
+    async execute(data: LoginProfessorDto): Promise<any> {
         const professor = await this.professorRepo.findByEmail(
             data.institutionalEmail,
         );
@@ -26,13 +30,21 @@ export class LoginProfessor {
             throw new Error('Professor not found');
         }
 
-        const isValid = await this.passwordService.compare(
-            data.institutionalPassword,
-            professor.institutionalPassword,
+        const response = await firstValueFrom(
+            this.scrapperService.send<
+                ValidateCredentialsResponse,
+                UATCredentials
+            >(
+                { cmd: 'professor.validate_credentials' },
+                {
+                    username: professor.institutionalEmail,
+                    password: data.encryptedPassword,
+                },
+            ),
         );
 
-        if (!isValid) {
-            throw new Error('Invalid credentials');
+        if (!response.success) {
+            throw new BadRequestException('Invalid Credentials');
         }
 
         return professor;

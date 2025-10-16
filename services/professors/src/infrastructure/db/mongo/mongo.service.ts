@@ -1,3 +1,4 @@
+import { ConnectionsConfig } from '@/infrastructure/http/modules/config/connections.config';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { MongoClient, Db } from 'mongodb';
 import * as mongoose from 'mongoose';
@@ -8,8 +9,10 @@ export class MongoService implements OnModuleDestroy, OnModuleInit {
     public db: Db;
     public mongoose: typeof mongoose;
 
+    constructor(private readonly connectionsConfig: ConnectionsConfig) {}
+
     async onModuleInit() {
-        const mongoUri = process.env.MONGO_URL;
+        const mongoUri = this.connectionsConfig.mongoUrl;
 
         this.client = new MongoClient(mongoUri);
         await this.client.connect();

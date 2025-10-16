@@ -2,8 +2,7 @@ import { GetProfessorClasses } from '@/application/use-cases/get-professor-class
 import { TakeAttendance } from '@/application/use-cases/take-attendace';
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { TakeAttendanceForClassDto } from './dtos/take-attendance-for-class';
-import { UATCredentials } from '@campus/libs';
+import { TakeAttendanceDto, UATCredentials } from '@campus/libs';
 import { ValidateCredentials } from '@/application/use-cases/validate-credentials';
 
 @Controller()
@@ -16,26 +15,18 @@ export class UatController {
 
     @MessagePattern({ cmd: 'professor.validate_credentials' })
     async handleValidateCredentials(data: UATCredentials) {
-        console.log('Validating credentials:', data);
+        console.log('Validating credentials:');
         return await this.validateCredentials.execute(data);
     }
 
     @EventPattern('professor.created')
-    async handleProfessorCreated(data: {
-        id: any;
-        institutionalEmail: string;
-        institutionalPassword: string;
-    }) {
-        console.log('Received professor.created event:', data);
-        await this.getProfessorClasses.execute({
-            id: data.id,
-            username: data.institutionalEmail,
-            password: data.institutionalPassword,
-        });
+    async handleProfessorCreated(data: UATCredentials) {
+        console.log('Received professor.created event:');
+        await this.getProfessorClasses.execute(data);
     }
 
     @EventPattern('professor.take_attendance_for_class')
-    async handleProfessorTakeAttendance(data: TakeAttendanceForClassDto) {
+    async handleProfessorTakeAttendance(data: TakeAttendanceDto) {
         await this.takeAttendance.execute(data);
     }
 }

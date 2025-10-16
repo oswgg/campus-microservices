@@ -1,3 +1,4 @@
+import { TakeAttendanceDto } from '@campus/libs';
 import { ApiProperty } from '@nestjs/swagger';
 import {
     IsNotEmpty,
@@ -7,7 +8,17 @@ import {
     MinLength,
 } from 'class-validator';
 
-export class TakeAttendanceDto {
+export class TakeAttendanceInput
+    implements Omit<TakeAttendanceDto, 'profId' | 'profEmail'>
+{
+    @ApiProperty({
+        example: '',
+        description: 'Contraseña encriptada del profesor',
+    })
+    @IsNotEmpty({ message: 'encryptedPassword is required' })
+    @IsString({ message: 'encryptedPassword should be a string' })
+    encryptedPassword: string;
+
     @ApiProperty({
         example: 'G',
         description: 'Grupo de la clase',

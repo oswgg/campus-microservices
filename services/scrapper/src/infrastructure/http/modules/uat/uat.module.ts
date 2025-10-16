@@ -1,8 +1,5 @@
-import { config } from 'dotenv';
 import { Module } from '@nestjs/common';
 import { UatController } from './uat.controller';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { SERVICE_NAMES } from '@campus/libs';
 import { GetProfessorClasses } from '@/application/use-cases/get-professor-classes';
 import { PuppeterBrowserService } from '@/infrastructure/services/browser/browser.puppeteer.service';
 import { AdminUATPuppeteerAuthService } from '@/infrastructure/services/uat/admin/auth.puppeteer.service';
@@ -16,24 +13,10 @@ import { ADMIN_UAT_ACTIONS_SERVICE_TOKEN } from '@/domain/services/uat/admin/act
 import { AdminUATPuppeteerActionsService } from '@/infrastructure/services/uat/admin/actions.puppeteer.service';
 import { TakeAttendance } from '@/application/use-cases/take-attendace';
 import { ValidateCredentials } from '@/application/use-cases/validate-credentials';
-
-const envFile =
-    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
-config({ path: envFile });
+import { MicroservicesModule } from '../microservices.module';
 
 @Module({
-    imports: [
-        ClientsModule.register([
-            {
-                name: SERVICE_NAMES.PROFESSOR,
-                transport: Transport.RMQ,
-                options: {
-                    urls: [process.env.RABBIT_URL],
-                    queue: 'professor_queue',
-                },
-            },
-        ]),
-    ],
+    imports: [MicroservicesModule],
     providers: [
         // Core services
         {

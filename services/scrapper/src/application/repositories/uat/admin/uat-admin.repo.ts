@@ -1,29 +1,17 @@
-import { ClassData, UATCredentials } from '@campus/libs';
+import {
+    ClassData,
+    TakeAttendanceDto,
+    UATCredentials,
+    ValidateCredentialsResponse,
+} from '@campus/libs';
 
 export interface AdminUATRepo {
     validateCredentials(
         data: UATCredentials,
-    ): Promise<{ success: boolean; message: string }>;
+    ): Promise<ValidateCredentialsResponse>;
 
-    getProfessorClasses(
-        credentials: UATCredentials & { id: any },
-    ): Promise<ClassData[]>;
-    takeAttendance(data: {
-        username: string;
-        password: string;
-        data: {
-            group: string;
-            classroom: string;
-            subject: string;
-            period: number;
-            date: string;
-            students: {
-                number: number;
-                name: string;
-                present: boolean;
-            }[];
-        };
-    }): Promise<void>;
+    getProfessorClasses(credentials: UATCredentials): Promise<ClassData[]>;
+    takeAttendance(data: TakeAttendanceDto): Promise<void>;
 }
 
 export const ADMIN_UAT_REPO_TOKEN = Symbol('admin_uat.repo');

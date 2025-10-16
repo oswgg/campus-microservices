@@ -6,7 +6,7 @@ import {
 } from '@/domain/entities/uat';
 import { AdminUATActionsService } from '@/domain/services/uat/admin/actions.service';
 import { sleep } from '@/domain/utils/sleep';
-import { ClassData } from '@campus/libs';
+import { ClassData, TakeAttendanceDto } from '@campus/libs';
 import { Injectable } from '@nestjs/common';
 import { Page } from 'puppeteer';
 
@@ -24,13 +24,9 @@ export class AdminUATPuppeteerActionsService implements AdminUATActionsService {
 
     async takeAttendance(
         page: Page,
-        data: ClassData & {
-            date: string;
-            students: { number: number; name: string; present: boolean }[];
-        },
+        data: Omit<TakeAttendanceDto, 'profId' | 'profEmail'>,
     ): Promise<void> {
         const materias = await this.readTablaMaterias(page);
-
         const target = materias.find(
             (m) =>
                 m.group === data.group &&

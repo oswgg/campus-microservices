@@ -1,43 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ProfessorController } from './professor.controller';
-import { SERVICE_NAMES } from '@campus/libs';
-import { ConfigService } from '@nestjs/config';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TOKEN_SERVICE_TOKEN } from '@/application/services/token.service';
 import { NestJwtService } from '@/infrastructure/services/jwt.nest';
+import { JwtConfig } from '../config/jwt.config';
+import { MicroservicesModule } from '../microservices.module';
 
 @Module({
     imports: [
-        ClientsModule.registerAsync([
-            {
-                name: SERVICE_NAMES.PROFESSOR,
-                inject: [ConfigService],
-                useFactory: (config: ConfigService) => ({
-                    transport: Transport.RMQ,
-                    options: {
-                        urls: [config.get<string>('RABBIT_URL')],
-                        queue: 'professor_queue',
-                    },
-                }),
-            },
-            {
-                name: SERVICE_NAMES.SCRAPER,
-                inject: [ConfigService],
-                useFactory: (config: ConfigService) => ({
-                    transport: Transport.RMQ,
-                    options: {
-                        urls: [config.get<string>('RABBIT_URL')],
-                        queue: 'scrapping_q',
-                    },
-                }),
-            },
-        ]),
+        MicroservicesModule,
         JwtModule.registerAsync({
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                secret: config.get<string>('JWT_SECRET'),
-                signOptions: { expiresIn: '24h' },
+            inject: [JwtConfig],
+            useFactory: (jwtConfig: JwtConfig) => ({
+                secret: jwtConfig.secret,
+                signOptions: { expiresIn: jwtConfig.expiresIn },
             }),
         }),
     ],

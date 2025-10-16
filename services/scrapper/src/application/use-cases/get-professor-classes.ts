@@ -15,15 +15,11 @@ export class GetProfessorClasses {
         private readonly attendanceRepo: AdminUATRepo,
     ) {}
 
-    async execute(data: { id: string; username: string; password: string }) {
-        const classes = await this.attendanceRepo.getProfessorClasses({
-            id: data.id,
-            username: data.username,
-            password: data.password,
-        });
+    async execute(data: UATCredentials) {
+        const classes = await this.attendanceRepo.getProfessorClasses(data);
 
         this.professorService.emit('professor.getted_classes', {
-            profId: data.id,
+            profEmail: data.username,
             classes,
         });
 

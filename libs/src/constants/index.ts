@@ -8,6 +8,7 @@ export const SERVICE_NAMES = {
     PROFESSOR: 'PROFESSOR_SERVICE',
     SCRAPER: 'SCRAPER_SERVICE',
     API_GATEWAY: 'API_GATEWAY_SERVICE',
+    SECURITY: 'SECURITY_SERVICE',
 } as const;
 
 // Puertos por defecto para cada servicio

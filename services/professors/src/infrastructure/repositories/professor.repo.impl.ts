@@ -17,7 +17,6 @@ export class ProfessorRepoImpl implements ProfessorRepository {
                 .values({
                     name: data.name,
                     institutionalEmail: data.institutionalEmail,
-                    institutionalPassword: data.institutionalPassword,
                 })
                 .returning();
 
@@ -25,7 +24,6 @@ export class ProfessorRepoImpl implements ProfessorRepository {
                 created.id,
                 created.name,
                 created.institutionalEmail,
-                created.institutionalPassword,
             );
         } catch (error) {
             console.log(error);
@@ -43,12 +41,7 @@ export class ProfessorRepoImpl implements ProfessorRepository {
             return null;
         }
 
-        return new Professor(
-            result.id,
-            result.name,
-            result.institutionalEmail,
-            result.institutionalPassword,
-        );
+        return new Professor(result.id, result.name, result.institutionalEmail);
     }
 
     async findById(id: string): Promise<any> {
@@ -61,12 +54,7 @@ export class ProfessorRepoImpl implements ProfessorRepository {
             return null;
         }
 
-        return new Professor(
-            result.id,
-            result.name,
-            result.institutionalEmail,
-            result.institutionalPassword,
-        );
+        return new Professor(result.id, result.name, result.institutionalEmail);
     }
 
     async saveClasses(data: any): Promise<void> {}
