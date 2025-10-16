@@ -17,8 +17,8 @@ services:
       - RABBIT_URL=${RABBIT_URL}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
-    ports:
-      - '4351:4351'
+    expose:
+      - 4351
     command: npm run start:prod
     depends_on:
       - rabbitmq
@@ -26,12 +26,9 @@ services:
     # 1. Etiquetas de Traefik para el routing público
     labels:
       - "traefik.enable=true"
-      # DOMINIO ACTUALIZADO
-      - "traefik.http.routers.api-gateway-router.rule=Host(`api.20040521.xyz`)"
-      - "traefik.http.routers.api-gateway-router.entrypoints=websecure"
-      - "traefik.http.routers.api-gateway-router.tls.certresolver=dokploy-le"
+      - "traefik.http.routers.api-gateway-router.rule=Host(`20040521.20040521.xyz`)"
+      - "traefik.http.routers.api-gateway-router.entrypoints=web"
       - "traefik.http.services.api-gateway-service.loadbalancer.server.port=4351"
-    # 2. Conexión a la red de Dokploy
     networks:
       - dokploy-network
 
