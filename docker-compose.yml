@@ -38,7 +38,14 @@ services:
       context: .
       dockerfile: ./services/professors/Dockerfile
     environment:
+      - PORT=${PROFESSORS_PORT}
+      - API_GATEWAY_HOST="${API_GATEWAY_HOST}"
+      - SCRAPPER_HOST="${SCRAPPER_HOST}"
+      - API_GATEWAY_PORT="${API_GATEWAY_PORT}"
+      - SCRAPPER_PORT="${SCRAPPER_PORT}"
+      - DB_URL="${DB_URL}"
       - RABBIT_URL="${RABBIT_URL}"
+      - MONGO_URL="${MONGO_URL}"
     ports:
       - '4352:4352'
     command: npm run start:prod
@@ -54,7 +61,17 @@ services:
     build:
       context: .
       dockerfile: ./services/security/Dockerfile
-    # Eliminamos 'container_name'
+    environment:
+      - PORT=${SECURITY_PORT}
+      - PROFESSORS_HOST="${PROFESSORS_HOST}"
+      - SCRAPPER_HOST="${SCRAPPER_HOST}"
+      - PROFESSORS_PORT="${PROFESSORS_PORT}"
+      - SCRAPPER_PORT="${SCRAPPER_PORT}"
+      - RABBIT_URL="${RABBIT_URL}"
+      - JWT_SECRET="${JWT_SECRET}"
+      - JWT_EXPIRES_IN="${JWT_EXPIRES_IN}"
+      - KEY_PASSPHRASE="${KEY_PASSPHRASE}"
+      - PRIVATE_KEY_B64="${PRIVATE_KEY_B64}"
     ports:
       - '4354:4354'
     command: npm run start:prod
@@ -69,7 +86,13 @@ services:
     build:
       context: .
       dockerfile: ./services/scrapper/Dockerfile
-    # Eliminamos 'container_name'
+    environment:
+      - PORT=${SRAPPER_PORT}
+      - API_GATEWAY_HOST="${API_GATEWAY_HOST}"
+      - PROFESSORS_HOST="${PROFESSORS_HOST}"
+      - API_GATEWAY_PORT="${API_GATEWAY_PORT}"
+      - PROFESSORS_PORT="${PROFESSORS_PORT}"
+      - RABBIT_URL="${RABBIT_URL}"
     ports:
       - '4353:4353'
     command: npm run start:prod
