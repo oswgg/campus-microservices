@@ -1,104 +1,152 @@
-services: 
+version: '3.8'
+
+services:
+  # --- SERVICIOS DE APLICACIÓN ---
   api-gateway:
     build:
       context: .
       dockerfile: ./services/api_gateway/Dockerfile
-    container_name: api-gateway
+    # Eliminamos 'container_name'
     ports:
       - '4351:4351'
-    env_file:
-      - ./services/api_gateway/.env
     command: npm run start:prod
     depends_on:
       - rabbitmq
       - postgres
+    # 1. Etiquetas de Traefik para el routing público
+    labels:
+      - "traefik.enable=true"
+      # *** DOMINIO ACTUALIZADO ***
+      - "traefik.http.routers.api-gateway-router.rule=Host(`api.20040521.xyz`)"
+      - "traefik.http.routers.api-gateway-router.entrypoints=websecure"
+      - "traefik.http.routers.api-gateway-router.tls.certresolver=dokploy-le"
+      - "traefik.http.services.api-gateway-service.loadbalancer.server.port=4351"
+    # 2. Conexión a la red de Dokploy
+    networks:
+      - dokploy-network
 
   professors:
     build:
       context: .
       dockerfile: ./services/professors/Dockerfile
-    container_name: professors
+    # Eliminamos 'container_name'
     ports:
       - '4352:4352'
-    env_file:
-      - ./services/professors/.env
     command: npm run start:prod
     depends_on:
       - rabbitmq
       - postgres
       - mongodb
+    # 2. Conexión a la red de Dokploy
+    networks:
+      - dokploy-network
+    # NOTA: Este servicio no necesita labels de Traefik si solo se comunica internamente.
     
   security:
     build:
       context: .
       dockerfile: ./services/security/Dockerfile
-    container_name: security
+    # Eliminamos 'container_name'
     ports:
       - '4354:4354'
-    env_file:
-      - ./services/security/.env
     command: npm run start:prod
     depends_on:
       - rabbitmq
       - postgres
+    # 2. Conexión a la red de Dokploy
+    networks:
+      - dokploy-network
 
   scrapper:
     build:
       context: .
       dockerfile: ./services/scrapper/Dockerfile
-    container_name: scrapper
+    # Eliminamos 'container_name'
     ports:
       - '4353:4353'
-    env_file:
-      - ./services/scrapper/.env
     command: npm run start:prod
     depends_on:
       - rabbitmq
       - postgres
+    # 2. Conexión a la red de Dokploy
+    networks:
+      - dokploy-network
     
+  # --- SERVICIOS DE INFRAESTRUCTURA ---
+
   postgres:
     image: postgres:15-alpine
-    container_name: pgsql
+    # Eliminamos 'container_name'
     environment:
       POSTGRES_USER: oswgg
       POSTGRES_PASSWORD: rootOGG040520.dev
       POSTGRES_DB: campus_professors
-    ports:
-      - '5433:5432'
+    # Quitamos el puerto público si no lo necesitas (opcional)
+    # ports:
+    #   - '5433:5432' 
     volumes:
+      # 3. Ajuste de volumen para persistencia en Dokploy
       - pgsql_data:/var/lib/postgresql/data
+    networks:
+      - dokploy-network
 
   mongodb:
     image: mongo:7-jammy
-    container_name: mongodb
+    # Eliminamos 'container_name'
     environment:
       MONGO_INITDB_ROOT_USERNAME: oswgg
       MONGO_INITDB_ROOT_PASSWORD: rootOGG040520.dev
       MONGO_INITDB_DATABASE: campus
-    ports:
-      - '27017:27017'
+    # Quitamos el puerto público si no lo necesitas (opcional)
+    # ports:
+    #   - '27017:27017'
     volumes:
+      # 3. Ajuste de volumen para persistencia en Dokploy
       - mongodb_data:/data/db
+    networks:
+      - dokploy-network
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: rabbitmq
+    # Eliminamos 'container_name'
     environment:
       RABBITMQ_DEFAULT_USER: oswgg
       RABBITMQ_DEFAULT_PASS: devOGG040520.dev
       RABBITMQ_DEFAULT_VHOST: /
+    # Mantenemos los puertos para que puedas acceder al Management UI (15672)
     ports:
       - '5672:5672'
       - '15672:15672'
     volumes:
+      # 3. Ajuste de volumen para persistencia en Dokploy
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
       interval: 30s
       timeout: 30s
       retries: 5
+    networks:
+      - dokploy-network
 
+# --- REDES ---
+networks:
+  dokploy-network:
+    external: true
+
+# --- VOLÚMENES ---
 volumes:
   rabbitmq_data:
+    driver_opts:
+      type: "none"
+      device: "${APP_PATH}/files/rabbitmq" # Ruta recomendada por Dokploy
+      o: "bind"
   pgsql_data:
+    driver_opts:
+      type: "none"
+      device: "${APP_PATH}/files/pgsql" # Ruta recomendada por Dokploy
+      o: "bind"
   mongodb_data:
+    driver_opts:
+      type: "none"
+      device: "${APP_PATH}/files/mongodb" # Ruta recomendada por Dokploy
+      o: "bind"
