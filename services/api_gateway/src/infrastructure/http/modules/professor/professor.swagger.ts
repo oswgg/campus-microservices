@@ -5,9 +5,9 @@ import {
     ApiBody,
     ApiHeaders,
 } from '@nestjs/swagger';
-import { RegisterProfessorDto } from './dtos/register-professor';
-import { TakeAttendanceDto } from './dtos/take-attendance';
-import { LoginProfessorDto } from './dtos/login-professor';
+import { RegisterProfessorInput } from './dtos/register-professor';
+import { TakeAttendanceInput } from './dtos/take-attendance';
+import { LoginProfessorInput } from './dtos/login-professor';
 
 /**
  * Documentación para el endpoint de registro de profesores
@@ -20,7 +20,7 @@ export const RegisterProfessorDocumentation = () =>
                 'Crea una nueva cuenta de profesor con credenciales institucionales. Este endpoint es público y no requiere autenticación.',
         }),
         ApiBody({
-            type: RegisterProfessorDto,
+            type: RegisterProfessorInput,
             description:
                 'Datos de registro del profesor incluyendo credenciales institucionales',
         }),
@@ -67,7 +67,7 @@ export const RegisterProfessorDocumentation = () =>
                         items: { type: 'string' },
                         example: [
                             'institutionalEmail must be a valid email',
-                            'institutionalPassword is required',
+                            'encryptedPassword is required',
                         ],
                     },
                     error: { type: 'string', example: 'Bad Request' },
@@ -99,7 +99,7 @@ export const LoginProfessorDocumentation = () =>
                 'Autentica a un profesor utilizando sus credenciales institucionales. Este endpoint es público y no requiere autenticación.',
         }),
         ApiBody({
-            type: LoginProfessorDto,
+            type: LoginProfessorInput,
             description:
                 'Credenciales de inicio de sesión del profesor incluyendo correo electrónico y contraseña',
         }),
@@ -142,7 +142,7 @@ export const LoginProfessorDocumentation = () =>
                         items: { type: 'string' },
                         example: [
                             'institutionalEmail must be a valid email',
-                            'institutionalPassword is required',
+                            'encryptedPassword is required',
                         ],
                     },
                     error: { type: 'string', example: 'Bad Request' },
@@ -278,7 +278,7 @@ export const TakeAttendanceDocumentation = () =>
             },
         ]),
         ApiBody({
-            type: TakeAttendanceDto,
+            type: TakeAttendanceInput,
             description:
                 'Datos necesarios para tomar la asistencia incluyendo información de la clase y estudiantes',
         }),
@@ -301,25 +301,6 @@ export const TakeAttendanceDocumentation = () =>
             },
         }),
         ApiResponse({
-            status: 400,
-            description: 'Datos de entrada inválidos para tomar asistencia',
-            schema: {
-                type: 'object',
-                properties: {
-                    message: {
-                        type: 'array',
-                        items: { type: 'string' },
-                        example: [
-                            'classId is required',
-                            'attendanceData must be an array',
-                        ],
-                    },
-                    error: { type: 'string', example: 'Bad Request' },
-                    statusCode: { type: 'number', example: 400 },
-                },
-            },
-        }),
-        ApiResponse({
             status: 401,
             description: 'Token de autenticación inválido o expirado',
             schema: {
@@ -327,22 +308,6 @@ export const TakeAttendanceDocumentation = () =>
                 properties: {
                     message: { type: 'string', example: 'Unauthorized' },
                     statusCode: { type: 'number', example: 401 },
-                },
-            },
-        }),
-        ApiResponse({
-            status: 403,
-            description:
-                'El profesor no tiene permisos para tomar asistencia de esta clase',
-            schema: {
-                type: 'object',
-                properties: {
-                    message: {
-                        type: 'string',
-                        example:
-                            'Forbidden - Class not assigned to this professor',
-                    },
-                    statusCode: { type: 'number', example: 403 },
                 },
             },
         }),

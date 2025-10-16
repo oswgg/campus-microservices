@@ -1,13 +1,10 @@
-import { ClassData } from '@campus/libs';
+import { ClassData, TakeAttendanceDto } from '@campus/libs';
 
 export interface AdminUATActionsService {
     getProfessorClasses(page: any): Promise<ClassData[]>;
     takeAttendance(
         page: any,
-        data: ClassData & {
-            date: string;
-            students: { number: number; name: string; present: boolean }[];
-        },
+        data: Omit<TakeAttendanceDto, 'profId' | 'profEmail'>,
     ): Promise<void>;
 }
 

@@ -11,7 +11,7 @@ import {
     BadRequestException,
     Logger,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, ClientProxyFactory } from '@nestjs/microservices';
 import { ApiTags } from '@nestjs/swagger';
 import {
     RegisterProfessorDocumentation,
@@ -20,8 +20,8 @@ import {
     LoginProfessorDocumentation,
 } from './professor.swagger';
 import { firstValueFrom } from 'rxjs';
-import { RegisterProfessorDto } from './dtos/register-professor';
-import { TakeAttendanceDto } from './dtos/take-attendance';
+import { RegisterProfessorInput } from './dtos/register-professor';
+import { TakeAttendanceInput } from './dtos/take-attendance';
 import { JwtAuthGuard } from '../../guards/jwt.guard';
 import { RequiredApp } from '../../guards/app-access.decorator';
 import { Public } from '../../guards/public-routes.decorator';
@@ -30,11 +30,13 @@ import {
     TokenService,
 } from '@/application/services/token.service';
 import { DomainApiResponse, TokenOutput } from '@/domain/api-response';
-import { LoginProfessorDto } from './dtos/login-professor';
+import { LoginProfessorInput } from './dtos/login-professor';
 import {
     ClassData,
+    LoginProfessorDto,
     RegisterProfessorOutput,
     SERVICE_NAMES,
+    TakeAttendanceDto,
 } from '@campus/libs';
 
 @ApiTags('Professors')
@@ -47,22 +49,23 @@ export class ProfessorController {
     constructor(
         @Inject(SERVICE_NAMES.PROFESSOR)
         private readonly professorService: ClientProxy,
-        @Inject(SERVICE_NAMES.SCRAPER)
-        private readonly scraperService: ClientProxy,
         @Inject(TOKEN_SERVICE_TOKEN)
         private readonly tokenService: TokenService,
+        @Inject(SERVICE_NAMES.SECURITY)
+        private readonly securityService: ClientProxy,
     ) {}
 
     @Public()
     @Post('register')
     @RegisterProfessorDocumentation()
     async registerProfessor(
-        @Body() body: RegisterProfessorDto,
+        @Body() body: RegisterProfessorInput,
     ): Promise<DomainApiResponse<RegisterProfessorOutput> & TokenOutput> {
         try {
-            const response: RegisterProfessorOutput = await firstValueFrom(
+            const response = await firstValueFrom(
                 this.professorService.send('professor.register', body),
             );
+
             return {
                 status: HttpStatus.CREATED,
                 message: 'Professor registered successfully',
@@ -87,11 +90,14 @@ export class ProfessorController {
     @Post('login')
     @LoginProfessorDocumentation()
     async loginProfessor(
-        @Body() body: LoginProfessorDto,
+        @Body() body: LoginProfessorInput,
     ): Promise<DomainApiResponse<any> & TokenOutput> {
         try {
             const professor = await firstValueFrom(
-                this.professorService.send('professor.login', body),
+                this.professorService.send<any, LoginProfessorDto>(
+                    'professor.login',
+                    body,
+                ),
             );
 
             if (!professor) {
@@ -128,9 +134,12 @@ export class ProfessorController {
     ): Promise<DomainApiResponse<ClassData[]> | { error: string }> {
         try {
             const classes: ClassData[] = await firstValueFrom(
-                this.professorService.send('professor.get_classes', {
-                    profId: request.user.id,
-                }),
+                this.professorService.send<ClassData[], any>(
+                    'professor.get_classes',
+                    {
+                        profId: request.user.id,
+                    },
+                ),
             );
             return {
                 status: HttpStatus.OK,
@@ -147,12 +156,17 @@ export class ProfessorController {
     @TakeAttendanceDocumentation()
     async takeAttendanceForClass(
         @Req() request: any,
-        @Body() body: TakeAttendanceDto,
+        @Body() body: TakeAttendanceInput,
     ): Promise<DomainApiResponse<any> | { error: string }> {
         try {
-            const response = this.professorService.send(
-                'professor.take_attendance_for_class',
-                { profId: request.user.id, ...body },
+            const response = await firstValueFrom(
+                this.professorService.send<
+                    any,
+                    Omit<TakeAttendanceDto, 'profEmail'>
+                >('professor.take_attendance_for_class', {
+                    profId: request.user.id,
+                    ...body,
+                }),
             );
 
             return {

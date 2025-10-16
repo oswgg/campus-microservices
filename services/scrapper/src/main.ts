@@ -1,11 +1,6 @@
-import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from '@/infrastructure/http/modules/app.module';
-
-const envFile =
-    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
-config({ path: envFile });
 
 async function bootstrap() {
     const micro = await NestFactory.createMicroservice<MicroserviceOptions>(

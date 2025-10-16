@@ -1,4 +1,3 @@
-// UAT (University Academic Terminal) related types and interfaces
 export interface ClassData {
     group: string;
     classroom: string;
@@ -10,12 +9,6 @@ export interface ClassData {
     }[];
 }
 
-export interface RegisterProfessorInput {
-    name: string;
-    institutionalEmail: string;
-    institutionalPassword: string;
-}
-
 export interface RegisterProfessorOutput {
     id: any;
     name: string;
@@ -23,7 +16,7 @@ export interface RegisterProfessorOutput {
     token: any;
 }
 
-export type UATCredentials = {
-    username: string;
-    password: string;
-};
+export interface ValidateCredentialsResponse {
+    success: boolean;
+    message: string;
+}

@@ -17,6 +17,6 @@ export class GetProfessorClasses {
             throw new Error('Professor not found');
         }
 
-        return await this.professorRepo.getClasses(profId);
+        return await this.professorRepo.getClasses(professor.id);
     }
 }

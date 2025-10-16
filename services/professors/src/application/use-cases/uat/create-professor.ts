@@ -1,8 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { RegisterProfessorEvent } from '@/domain/events/register.event';
 import { Professor } from '@/domain/entities/professor.entity';
-import { SERVICE_NAMES } from '@campus/libs';
+import { RegisterProfessorDto, SERVICE_NAMES } from '@campus/libs';
 import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,
@@ -17,7 +16,7 @@ export class CreateProfessor {
         private readonly scrappingService: ClientProxy,
     ) {}
 
-    async execute(data: RegisterProfessorEvent) {
+    async execute(data: RegisterProfessorDto) {
         // Business logic to create a professor
         const professor = await this.professorRepo.findByEmail(
             data.institutionalEmail,
@@ -31,7 +30,7 @@ export class CreateProfessor {
                 { cmd: 'professor.validate_credentials' },
                 {
                     username: data.institutionalEmail,
-                    password: data.institutionalPassword,
+                    password: data.encryptedPassword,
                 },
             ),
         );
@@ -41,19 +40,12 @@ export class CreateProfessor {
         }
 
         const newProfessor = await this.professorRepo.create(
-            new Professor(
-                0,
-                data.name,
-                data.institutionalEmail,
-                data.institutionalPassword,
-            ),
+            new Professor(0, data.name, data.institutionalEmail),
         );
 
         const eventData = {
-            id: newProfessor.id,
-            name: newProfessor.name,
-            institutionalEmail: newProfessor.institutionalEmail,
-            institutionalPassword: newProfessor.institutionalPassword,
+            username: newProfessor.institutionalEmail,
+            password: data.encryptedPassword,
         };
 
         try {

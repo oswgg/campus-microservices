@@ -16,14 +16,12 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
                 .insertOne({
                     name: professor.name,
                     institutionalEmail: professor.institutionalEmail,
-                    institutionalPassword: professor.institutionalPassword,
                 });
 
             return new Professor(
                 created.insertedId,
                 professor.name,
                 professor.institutionalEmail,
-                professor.institutionalPassword,
             );
         } catch (error) {
             console.log(error);
@@ -45,7 +43,6 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
                 result._id,
                 result.name,
                 result.institutionalEmail,
-                result.institutionalPassword,
             );
         } catch (error) {
             console.log(error);
@@ -67,7 +64,6 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
                 result._id,
                 result.name,
                 result.institutionalEmail,
-                result.institutionalPassword,
             );
         } catch (error) {
             console.log(error);
@@ -75,15 +71,15 @@ export class ProfessorMongoRepoImpl implements ProfessorRepository {
         }
     }
 
-    async saveClasses(profId: any, classes: ClassData[]): Promise<void> {
+    async saveClasses(profEmail: any, classes: ClassData[]): Promise<void> {
         try {
             console.log(
-                `Saving ${classes.length} classes for professor ${profId}...`,
+                `Saving ${classes.length} classes for professor ${profEmail}...`,
             );
             const result = await this.mongo.db
                 .collection('professors')
                 .updateOne(
-                    { _id: new ObjectId(profId) },
+                    { institutionalEmail: profEmail },
                     { $set: { classes: classes } },
                 );
 

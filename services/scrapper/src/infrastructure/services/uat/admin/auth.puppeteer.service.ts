@@ -1,11 +1,18 @@
 import { AdminUATConfig } from '@/config/uat/attendance.config';
 import { AdminUATAuthService } from '@/domain/services/uat/admin/auth.service';
-import { UATCredentials } from '@campus/libs';
-import { Injectable } from '@nestjs/common';
+import { SERVICE_NAMES, UATCredentials } from '@campus/libs';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { Page } from 'puppeteer';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AdminUATPuppeteerAuthService implements AdminUATAuthService {
+    constructor(
+        @Inject(SERVICE_NAMES.SECURITY)
+        private readonly encrypterService: ClientProxy,
+    ) {}
+
     async login(
         page: Page,
         credentials: UATCredentials,
@@ -33,9 +40,18 @@ export class AdminUATPuppeteerAuthService implements AdminUATAuthService {
             .locator(AdminUATConfig.selectors.login.username)
             .fill(credentials.username);
 
+        let decryptedPassword = await firstValueFrom(
+            this.encrypterService.send(
+                { cmd: 'encrypter.decrypt' },
+                credentials.password,
+            ),
+        );
+
         await page
             .locator(AdminUATConfig.selectors.login.password)
-            .fill(credentials.password);
+            .fill(decryptedPassword);
+
+        decryptedPassword = null;
 
         await page.locator(AdminUATConfig.selectors.login.checkbox).click();
     }
@@ -82,7 +98,6 @@ export class AdminUATPuppeteerAuthService implements AdminUATAuthService {
                     response.message = 'Login successful';
                 }),
         ]);
-        console.log('Login response:', response);
         return response;
     }
 }

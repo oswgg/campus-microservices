@@ -2,8 +2,7 @@ import {
     PROFESSOR_REPO_TOKEN,
     ProfessorRepository,
 } from '@/application/repositories/professor.repo';
-import { TakeAttendanceDto } from '@/infrastructure/http/modules/professor/dtos/take-attendance';
-import { SERVICE_NAMES } from '@campus/libs';
+import { SERVICE_NAMES, TakeAttendanceDto } from '@campus/libs';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
@@ -22,10 +21,12 @@ export class TakeAttendance {
             throw new Error('Professor not found');
         }
 
-        this.scrapperService.emit('professor.take_attendance_for_class', {
-            username: professor.institutionalEmail,
-            password: professor.institutionalPassword,
-            data: {
+        this.scrapperService.emit<any, TakeAttendanceDto>(
+            'professor.take_attendance_for_class',
+            {
+                profId: professor.id,
+                profEmail: professor.institutionalEmail,
+                encryptedPassword: data.encryptedPassword,
                 group: data.group,
                 classroom: data.classroom,
                 subject: data.subject,
@@ -33,7 +34,7 @@ export class TakeAttendance {
                 date: data.date,
                 students: data.students,
             },
-        });
+        );
 
         return { message: 'Take attendance process initiated' };
     }

@@ -3,8 +3,7 @@ import {
     ADMIN_UAT_REPO_TOKEN,
     AdminUATRepo,
 } from '../repositories/uat/admin/uat-admin.repo';
-import { TakeAttendanceForClassDto } from '@/infrastructure/http/modules/uat/dtos/take-attendance-for-class';
-import { SERVICE_NAMES } from '@campus/libs';
+import { SERVICE_NAMES, TakeAttendanceDto } from '@campus/libs';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
@@ -16,15 +15,11 @@ export class TakeAttendance {
         private readonly professorClient: ClientProxy,
     ) {}
 
-    async execute(data: TakeAttendanceForClassDto): Promise<void> {
+    async execute(data: TakeAttendanceDto): Promise<void> {
         try {
             await this.adminUATRepo.takeAttendance(data);
 
-            this.professorClient.emit('professor.attendance_taken', {
-                ...data,
-                username: undefined,
-                password: undefined,
-            });
+            this.professorClient.emit('professor.attendance_taken', data);
         } catch (error) {
             console.error('Error taking attendance:', error);
             throw error;

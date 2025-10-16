@@ -6,7 +6,7 @@
     "libs/*"
   ],
   "scripts": {
-    "dev": "npm run start:dev -w @campus/scrapper & npm run start:dev -w @campus/professors & npm run start:dev -w @campus/api",
+    "dev": "npm run start:dev -w @campus/scrapper & npm run start:dev -w @campus/professors & npm run start:dev -w @campus/api & npm run start:dev -w @campus/security",
     "prod": "docker-compose -f docker-compose.yml up",
     "prod:build": "docker-compose -f docker-compose.yml up --build",
     "down": "docker-compose down",

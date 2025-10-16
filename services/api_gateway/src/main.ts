@@ -1,12 +1,7 @@
-import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './infrastructure/http/modules/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
-const envFile =
-    process.env.NODE_ENV === 'production' ? '.env' : '.env.development';
-config({ path: envFile });
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

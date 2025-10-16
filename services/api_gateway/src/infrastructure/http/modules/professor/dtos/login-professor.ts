@@ -1,11 +1,11 @@
-import { UATCredentials } from '@campus/libs';
+import { LoginProfessorDto, UATCredentials } from '@campus/libs';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginProfessorDto {
+export class LoginProfessorInput implements LoginProfessorDto {
     @ApiProperty({
         example: 'maria.gonzalez@uat.edu.mx',
-        description: 'The institutional email of the professor',
+        description: 'El correo institucional del profesor',
         format: 'email',
     })
     @IsNotEmpty({ message: 'Institutional email is required' })
@@ -13,12 +13,10 @@ export class LoginProfessorDto {
     institutionalEmail: string;
 
     @ApiProperty({
-        example: 'securePassword123',
-        description: 'The password for the professor account',
-        minLength: 8,
-        maxLength: 50,
+        example: 'Y65ruAZiQnCq5/NkzBxiuYwwwqKyp/YOC94SdylAR5yllHkH...',
+        description: 'La constraseña encriptada del profesor',
     })
     @IsNotEmpty({ message: 'Password is required' })
     @IsString({ message: 'Password must be a string' })
-    institutionalPassword: string;
+    encryptedPassword: string;
 }

@@ -8,18 +8,6 @@ services:
       - '4351:4351'
     env_file:
       - ./services/api_gateway/.env
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./services/api_gateway/src
-          target: /app/src
-          ignore:
-            - node_modules/
-        - action: sync+restart
-          path: ./libs
-          target: /app/libs
-          ignore:
-            - node_modules/
     command: npm run start:prod
     depends_on:
       - rabbitmq
@@ -34,23 +22,25 @@ services:
       - '4352:4352'
     env_file:
       - ./services/professors/.env
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./services/professors/src
-          target: /app/src
-          ignore:
-            - node_modules/
-        - action: sync+restart
-          path: ./libs
-          target: /app/libs
-          ignore:
-            - node_modules/
     command: npm run start:prod
     depends_on:
       - rabbitmq
       - postgres
       - mongodb
+    
+  security:
+    build:
+      context: .
+      dockerfile: ./services/security/Dockerfile
+    container_name: security
+    ports:
+      - '4354:4354'
+    env_file:
+      - ./services/security/.env
+    command: npm run start:prod
+    depends_on:
+      - rabbitmq
+      - postgres
 
   scrapper:
     build:
@@ -61,18 +51,6 @@ services:
       - '4353:4353'
     env_file:
       - ./services/scrapper/.env
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./services/scrapper/src
-          target: /app/src
-          ignore:
-            - node_modules/
-        - action: sync+restart
-          path: ./libs
-          target: /app/libs
-          ignore:
-            - node_modules/
     command: npm run start:prod
     depends_on:
       - rabbitmq

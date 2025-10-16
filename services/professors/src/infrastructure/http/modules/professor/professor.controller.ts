@@ -1,11 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
-import { RegisterProfessorEvent } from '@/domain/events/register.event';
-import { ClassData } from '@campus/libs';
+import {
+    ClassData,
+    LoginProfessorDto,
+    RegisterProfessorDto,
+    TakeAttendanceDto,
+} from '@campus/libs';
 import { CreateProfessor } from '@/application/use-cases/uat/create-professor';
 import { SaveProfessorClasses } from '@/application/use-cases/uat/save-professor-classes';
 import { GetProfessorClasses } from '@/application/use-cases/uat/get-professors-classes';
-import { TakeAttendanceDto } from './dtos/take-attendance';
 import { TakeAttendance } from '@/application/use-cases/uat/take-attendance';
 import { LoginProfessor } from '@/application/use-cases/uat/login-professor';
 
@@ -20,20 +23,17 @@ export class ProfessorController {
     ) {}
 
     @EventPattern('professor.register')
-    async register(data: RegisterProfessorEvent) {
+    async register(data: RegisterProfessorDto) {
         return this.createProfessor.execute(data);
     }
 
     @MessagePattern('professor.login')
-    async login(data: {
-        institutionalEmail: string;
-        institutionalPassword: string;
-    }) {
+    async login(data: LoginProfessorDto) {
         return await this.loginProfessor.execute(data);
     }
 
     @EventPattern('professor.get_classes')
-    async getClasses(data: { profId: string }) {
+    async getClasses(data: { profId: any }) {
         return await this.getProfessorClasses.execute(data.profId);
     }
 
@@ -44,16 +44,16 @@ export class ProfessorController {
 
     @EventPattern('professor.getted_classes')
     async handleProfessorGettedClasses(data: {
-        profId: any;
+        profEmail: any;
         classes: ClassData[];
     }) {
-        console.log('Received professor.getted_classes event:', data);
-        await this.saveProfessorClasses.execute(data.profId, data.classes);
+        console.log('Received professor.getted_classes event:');
+        await this.saveProfessorClasses.execute(data.profEmail, data.classes);
     }
 
     @EventPattern('professor.attendance_taken')
     async handleProfessorAttendanceTaken(data: any) {
-        console.log('Attendance taken event received:', data);
+        console.log('Attendance taken event received:');
         // Handle the event as needed
     }
 }
