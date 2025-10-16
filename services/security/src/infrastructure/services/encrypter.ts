@@ -38,7 +38,6 @@ export class EncrypterService implements IEncrypterService {
                 buffer,
             );
             const response = plaintext.toString('utf8');
-            console.log(response);
             return response;
         } catch (err) {
             console.log(err);
