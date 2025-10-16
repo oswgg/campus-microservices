@@ -6,7 +6,15 @@ services:
     build:
       context: .
       dockerfile: ./services/api_gateway/Dockerfile
-    # Eliminamos 'container_name'
+    environment:
+      - PORT=${API_GATEWAY_PORT}
+      - PROFESSORS_HOST="${PROFESSORS_HOST}"
+      - SCRAPPER_HOST="${SCRAPPER_HOST}"
+      - PROFESSORS_PORT="${PROFESSORS_PORT}"
+      - SCRAPPER_PORT="${SCRAPPER_PORT}"
+      - RABBIT_URL="${RABBIT_URL}"
+      - JWT_SECRET="${JWT_SECRET}"
+      - JWT_EXPIRES_IN="${JWT_EXPIRES_IN}"
     ports:
       - '4351:4351'
     command: npm run start:prod
@@ -29,7 +37,8 @@ services:
     build:
       context: .
       dockerfile: ./services/professors/Dockerfile
-    # Eliminamos 'container_name'
+    environment:
+      - RABBIT_URL="${RABBIT_URL}"
     ports:
       - '4352:4352'
     command: npm run start:prod
